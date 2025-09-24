@@ -9,18 +9,11 @@ CREATE TABLE usuario (
     email VARCHAR(150) NOT NULL
 );
 
-CREATE TABLE tipo_tarefa (
-	tipo_id BIGINT PRIMARY KEY NOT NULL,
-    tipo VARCHAR(50),
-    medida VARCHAR(50),
-    categoria VARCHAR(50)
-);
-
 CREATE TABLE tarefas (
 	id_tarefa BIGINT AUTO_INCREMENT,
 	id_usuario BIGINT, 
 	titulo VARCHAR(100) NOT NULL UNIQUE,
-	tipo_id INT NOT NULL DEFAULT 0,
+	tipo VARCHAR(50) NOT NULL,
 	descricao VARCHAR(200),
 	meta_inicio INT,
 	meta_fim INT,
@@ -33,8 +26,7 @@ CREATE TABLE tarefas (
 	cor VARCHAR(12) NOT NULL,
 	status_tarefa INT NOT NULL,
 	PRIMARY KEY (id_tarefa, id_usuario),
-	FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
-	FOREIGN KEY (tipo_id) REFERENCES tipo_tarefa(tipo_id)
+	FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 );
