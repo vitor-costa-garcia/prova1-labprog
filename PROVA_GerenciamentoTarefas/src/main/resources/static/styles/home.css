@@ -1,0 +1,102 @@
+body{
+    background: #f3f3f3;
+}
+
+.container-home{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.home-header{
+    padding: 20px;
+    background-color: #fafafa;
+    width: 100%;
+    height: 8%;
+    border-bottom-right-radius: 10px;
+    box-shadow: #eaeaea 3px 3px 3px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.home-header h2{
+    margin-left: 30px;
+}
+
+.home-header-buttons{
+    width: 500px;
+    justify-content: space-between;
+    display: flex;
+}
+
+.home-header h1{
+    width: fit-content;
+}
+
+.home-task-manager{
+    display: flex;
+    background-color: #fafafa;
+    border-radius: 10px;
+    box-shadow: #eaeaea 3px 3px 3px;
+    width: 30%;
+    height: 500px;
+    margin: 1%;
+    margin-top: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.btn-light{
+    border: transparent;
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.btn-light:hover{
+    background-color: #ededed;
+    border: transparent;
+}
+
+.task-postit-1{
+    width: 200px;
+    height: 200px;
+    position: fixed;
+    resize: both;
+    min-width: 200px;
+    min-height: 200px;
+    overflow: hidden;
+}
+
+.task-postit-top-1{
+    width:100%;
+    height: 40px;
+    background-color: #fff17b;
+    cursor: pointer;
+}
+
+.task-postit-body-1{
+    width: 100%;
+    height: 100%;
+    background-color: #fff289;
+}
+
+.task-postit-textarea{
+    width: 96%;
+    height: 70%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    scrollbar-width: none;
+    padding: 10px;
+}
+
+.task-postit-textarea:focus{
+    border-color: grey;
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 5px;
+}
