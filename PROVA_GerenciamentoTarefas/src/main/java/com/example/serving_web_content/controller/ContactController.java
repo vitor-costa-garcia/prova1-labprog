@@ -1,57 +1,71 @@
 package com.example.serving_web_content.controller;
 
-import com.example.serving_web_content.services.ContactService;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 import com.example.serving_web_content.models.Contact;
+import com.example.serving_web_content.services.ContactService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RestController
+@Controller
 @RequestMapping("/contatos")
 public class ContactController {
+    private final ContactService contactService;
 
     @Autowired
-    private ContactService contactService;
-
-    /*
-    @Autowired
-    private ContactController(ContactService contactService) {
+    public ContactController(ContactService contactService) {
         this.contactService = contactService;
     }
-    */
-
-    @GetMapping("/")
-    public String contatos(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
-        return "greeting";
-    }
-
     @GetMapping
-    public List<Contact> getContatos(){
-        return contactService.listar();
+    public String listar(Model model) {
+        model.addAttribute("contatos", contactService.listar());
+        return "contatos/lista";
     }
 
-    @GetMapping("/{id}")
-    public Contact getContato(@PathVariable int id){
-        return contactService.listar().get(id);
+    @GetMapping("/novo")
+    public String abrirCadastro(Model model) {
+        model.addAttribute("contato", new Contact());
+        return "contatos/form";
     }
-
     @PostMapping
-    public Contact addContato(@RequestBody Contact contato){
+    public String cadastrar(@Valid @ModelAttribute Contact contato,
+                            BindingResult erros,
+                            RedirectAttributes ra) {
+
+        if (erros.hasErrors()) {
+            return "contatos/form";
+        }
         contactService.adicionar(contato);
-        return contato;
+        ra.addFlashAttribute("msg", "Contato cadastrado com sucesso!");
+        return "redirect:/contatos";
     }
 
+    @GetMapping("/editar/{id}")
+    public String abrirEdicao(@PathVariable Long id, Model model) {
+        model.addAttribute("contato", contactService.listarPorId(Math.toIntExact(id)));
+        return "contatos/form";
+    }
     @PutMapping("/{id}")
-    public Contact updateContato(@RequestBody Contact contato, @PathVariable int id){
-        contactService.atualizar(id,  contato);
-        return contato;
+    public String atualizar(@PathVariable Long id,
+                            @Valid @ModelAttribute Contact contato,
+                            BindingResult erros,
+                            RedirectAttributes ra) {
+        if (erros.hasErrors()) {
+            return "contatos/form";
+        }
+        contactService.atualizar(id, contato);
+        ra.addFlashAttribute("msg", "Cliente atualizado!");
+        return "redirect:/clientes";
     }
 
     @DeleteMapping("/{id}")
-    public void deleteContato(@PathVariable int id){
-        contactService.remover(id);
+    public String excluir(@PathVariable Long id,
+                          RedirectAttributes ra) {
+        contactService.remover(Math.toIntExact(id));
+        ra.addFlashAttribute("msg", "Cliente excluído!");
+        return "redirect:/clientes";
     }
 }

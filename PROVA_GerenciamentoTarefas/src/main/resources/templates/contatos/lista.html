@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt−BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF−8"><title>Clientes − Lista</title></head>
+<body>
+<h1>Clientes</h1>
+<!−− Mensagem de sucesso −−>
+<p th:if="${msg}" th:text="${msg}"></p>
+<p><a th:href="@{/clientes/novo}">Novo Cliente</a></p>
+<table>
+    <tr>
+        <th>Nome</th>
+        <th>Telefone</th>
+        <th>Email</th>
+        <th>Endereço</th>
+        <th>Data nascimento</th>
+        <th>Ações</th>
+    </tr>
+    <tr th:each="c : ${contatos}">
+        <td th:text="${c.nome}"></td>
+        <td th:text="${c.telefone}"></td>
+        <td th:text="${c.email}"></td>
+        <td th:text="${c.endereco}"></td>
+        <td th:text="${c.dataNascimento}"></td>
+        <td>
+            <form th:action="@{/contatos/editar/{id}(id=${c.id})}" method="get">
+                <button type="submit">Editar</button>
+            </form>
+            <form th:action="@{/contatos/{id}(id=${c.id})}" method="post">
+                <input type="hidden" name="method" value="delete"/>
+                <button type="submit">Excluir</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
