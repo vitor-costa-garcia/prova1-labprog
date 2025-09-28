@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tarefa - Formulário</title>
+</head>
+<body>
+<h1 th:text="${tarefa.getId()} != -1 ? 'Editar Tarefa' : 'Nova Tarefa'"></h1>
+
+<!-- Formulário de cadastro -->
+<form th:if="${tarefa.getId()} == -1" th:action="@{/tarefas}" method="post" th:object="${tarefa}">
+    <label for="idUsuario">ID Usuario:</label>
+    <input th:field="*{idUsuario}" id="idUsuario" type="number" required><br>
+
+    <label for="titulo">Titulo:</label>
+    <input th:field="*{titulo}" id="titulo" type="text" required><br>
+
+    <label for="tipo">Tipo:</label>
+    <input th:field="*{tipo}" id="tipo" type="text"><br>
+
+    <label for="descricao">Descrição:</label>
+    <input th:field="*{descricao}" id="descricao" type="text"><br>
+
+    <label for="dataInicio">Data Início:</label>
+    <input th:field="*{dataInicio}" id="dataInicio" type="date"><br>
+
+    <label for="dataFim">Data Fim:</label>
+    <input th:field="*{dataFim}" id="dataFim" type="date"><br>
+
+    <label for="posx">PosX:</label>
+    <input th:field="*{posx}" id="posx" type="number"><br>
+
+    <label for="posy">PosY:</label>
+    <input th:field="*{posy}" id="posy" type="number"><br>
+
+    <label for="comprimento">Comprimento:</label>
+    <input th:field="*{comprimento}" id="comprimento" type="number"><br>
+
+    <label for="altura">Altura:</label>
+    <input th:field="*{altura}" id="altura" type="number"><br>
+
+    <label for="cor">Cor:</label>
+    <input th:field="*{cor}" id="cor" type="text"><br>
+
+    <label for="statusTarefa">Status:</label>
+    <input th:field="*{statusTarefa}" id="statusTarefa" type="number"><br>
+
+    <!-- Erros de validação -->
+    <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
+    <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+    <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+    <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+    <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+    <div th:if="${#fields.hasErrors('dataFim')}" th:errors="*{dataFim}"></div>
+    <div th:if="${#fields.hasErrors('posx')}" th:errors="*{posx}"></div>
+    <div th:if="${#fields.hasErrors('posy')}" th:errors="*{posy}"></div>
+    <div th:if="${#fields.hasErrors('comprimento')}" th:errors="*{comprimento}"></div>
+    <div th:if="${#fields.hasErrors('altura')}" th:errors="*{altura}"></div>
+    <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
+    <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
+
+
+    <button type="submit">Cadastrar</button>
+    <a th:href="@{/tarefas}">Cancelar</a>
+</form>
+
+<!-- Formulário de edição -->
+<form th:if="${tarefa.getId()} != -1" th:action="@{/tarefas/{id}(id=${tarefa.getId()})}" method="post" th:object="${tarefa}">
+    <input type="hidden" name="_method" value="put"/>
+
+    <label for="idUsuario">ID Usuario:</label>
+    <input th:field="*{idUsuario}" id="idUsuario" type="number" required><br>
+
+    <label for="titulo">Titulo:</label>
+    <input th:field="*{titulo}" id="titulo" type="text" required><br>
+
+    <label for="tipo">Tipo:</label>
+    <input th:field="*{tipo}" id="tipo" type="text"><br>
+
+    <label for="descricao">Descrição:</label>
+    <input th:field="*{descricao}" id="descricao" type="text"><br>
+
+    <label for="dataInicio">Data Início:</label>
+    <input th:field="*{dataInicio}" id="dataInicio" type="date"><br>
+
+    <label for="dataFim">Data Fim:</label>
+    <input th:field="*{dataFim}" id="dataFim" type="date"><br>
+
+    <label for="posx">PosX:</label>
+    <input th:field="*{posx}" id="posx" type="number"><br>
+
+    <label for="posy">PosY:</label>
+    <input th:field="*{posy}" id="posy" type="number"><br>
+
+    <label for="comprimento">Comprimento:</label>
+    <input th:field="*{comprimento}" id="comprimento" type="number"><br>
+
+    <label for="altura">Altura:</label>
+    <input th:field="*{altura}" id="altura" type="number"><br>
+
+    <label for="cor">Cor:</label>
+    <input th:field="*{cor}" id="cor" type="text"><br>
+
+    <label for="statusTarefa">Status:</label>
+    <input th:field="*{statusTarefa}" id="statusTarefa" type="number"><br>
+
+    <!-- Erros de validação -->
+    <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
+    <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+    <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+    <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+    <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+    <div th:if="${#fields.hasErrors('dataFim')}" th:errors="*{dataFim}"></div>
+    <div th:if="${#fields.hasErrors('posx')}" th:errors="*{posx}"></div>
+    <div th:if="${#fields.hasErrors('posy')}" th:errors="*{posy}"></div>
+    <div th:if="${#fields.hasErrors('comprimento')}" th:errors="*{comprimento}"></div>
+    <div th:if="${#fields.hasErrors('altura')}" th:errors="*{altura}"></div>
+    <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
+    <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
+
+
+
+    <button type="submit">Atualizar</button>
+    <a th:href="@{/tarefas}">Cancelar</a>
+</form>
+</body>
+</html>
+
+<!--
+        this.idTarefa = idTarefa;
+        this.idUsuario = idUsuario;
+        this.titulo = titulo;
+        this.tipo = tipo;
+        this.descricao = descricao;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.posx = posx;
+        this.posy = posy;
+        this.comprimento = comprimento;
+        this.altura = altura;
+        this.cor = cor;
+        this.statusTarefa = statusTarefa;
+-->

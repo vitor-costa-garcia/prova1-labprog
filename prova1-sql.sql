@@ -3,30 +3,47 @@ CREATE DATABASE gerenciamento_tarefas;
 USE gerenciamento_tarefas;
 
 CREATE TABLE usuario (
-	id_usuario BIGINT AUTO_INCREMENT PRIMARY KEY,
+	idUsuario BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100),
-    data_nascimento DATETIME NOT NULL,
+    dataNascimento DATETIME NOT NULL,
     email VARCHAR(150) NOT NULL
 );
 
 CREATE TABLE tarefas (
-	id_tarefa BIGINT AUTO_INCREMENT,
-	id_usuario BIGINT, 
+	idTarefa BIGINT AUTO_INCREMENT,
+	idUsuario BIGINT, 
 	titulo VARCHAR(100) NOT NULL UNIQUE,
 	tipo VARCHAR(50) NOT NULL,
 	descricao VARCHAR(200),
-	meta_inicio INT,
-	meta_fim INT,
-	data_inicio DATETIME NOT NULL,
-	data_fim DATETIME,
+	dataInicio DATETIME NOT NULL,
+	dataFim DATETIME,
 	posx INT NOT NULL,
 	posy INT NOT NULL,
 	comprimento INT NOT NULL,
 	altura INT NOT NULL,
-	cor VARCHAR(12) NOT NULL,
-	status_tarefa INT NOT NULL,
-	PRIMARY KEY (id_tarefa, id_usuario),
-	FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+	cor INT NOT NULL,
+	statusTarefa INT NOT NULL,
+	PRIMARY KEY (idTarefa, idUsuario),
+	FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
 );
+
+INSERT INTO usuario VALUES (1, "Vitor da Costa", "2006-08-01", "vitorcostagarcia2006@gmail.com");
+
+INSERT INTO tarefas VALUES (1,
+						    1,
+                            "Titulogenerico",
+							"Geral",
+                            "Essa é a descrição da minha tarefa que ficará escrita no postit",
+                            "2024-08-08",
+                            null,
+                            100,
+                            100,
+                            100,
+                            100,
+                            0,
+                            0
+                           );
+
+SELECT * FROM tarefas;

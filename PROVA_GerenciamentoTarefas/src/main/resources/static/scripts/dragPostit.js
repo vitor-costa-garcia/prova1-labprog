@@ -33,6 +33,25 @@ for (let i = 0; i < postItDrag.length; i++) {
     function mouseUp(e) {
         document.removeEventListener("mousemove", mouseMove)
         postIt[i].style.boxShadow = "none";
+
+        // Get new coordinates
+        const newPosition = {
+            idTarefa: postIt[i].id, // make sure each div has a unique id in a data attribute
+            x: postIt[i].offsetLeft,
+            y: postIt[i].offsetTop
+        };
+
+        // Send to backend
+        fetch('/tarefas/atualizar_pos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newPosition)
+        })
+            .then(response => response.json())
+            .then(data => console.log('Position updated:', data))
+            .catch(err => console.error('Error updating position:', err));
     }
 }
 
