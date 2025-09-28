@@ -40,11 +40,6 @@ public class Tarefa {
     @Column(name="dataInicio", nullable = false, unique = false, length = 12)
     private String dataInicio;
 
-    @DateTimeFormat()
-    @Size(max = 30, message = "A data de fim deve ter no máximo 12 caracteres")
-    @Column(name="dataFim", nullable = true, unique = false, length = 12)
-    private String dataFim;
-
     @Column(name="posx", nullable = false)
     private int posx;
 
@@ -70,7 +65,6 @@ public class Tarefa {
                   String tipo,
                   String descricao,
                   String dataInicio,
-                  String dataFim,
                   int posx,
                   int posy,
                   int comprimento,
@@ -83,7 +77,6 @@ public class Tarefa {
         this.tipo = tipo;
         this.descricao = descricao;
         this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
         this.posx = posx;
         this.posy = posy;
         this.comprimento = comprimento;
@@ -104,7 +97,6 @@ public class Tarefa {
     public String getTipo(){ return tipo; }
     public String getDescricao(){ return descricao; }
     public String getDataInicio(){ return dataInicio; }
-    public String getDataFim(){ return dataFim; }
     public int    getPosx(){ return posx; }
     public int    getPosy(){ return posy; }
     public int    getComprimento(){ return comprimento; }
@@ -119,7 +111,6 @@ public class Tarefa {
     public void setTipo(String tipo){ this.tipo = tipo; }
     public void setDescricao(String descricao){ this.descricao = descricao; }
     public void setDataInicio(String dataInicio){ this.dataInicio = dataInicio; }
-    public void setDataFim(String dataFim){ this.dataFim = dataFim; }
     public void setPosx(int posx){ this.posx = posx; }
     public void setPosy(int posy){ this.posy = posy; }
     public void setComprimento(int comprimento){ this.comprimento = comprimento; }

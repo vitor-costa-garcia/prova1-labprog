@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuário - Formulário</title>
+</head>
+<body>
+<h1 th:text="${usuario.getId()} != -1 ? 'Editar Usuário' : 'Novo Usuário'"></h1>
+
+<!-- Formulário de cadastro -->
+<form th:if="${usuario.getId()} == -1" th:action="@{/usuarios}" method="post" th:object="${usuario}">
+    <label for="nome">Nome:</label>
+    <input th:field="*{nome}" id="nome" type="text" required><br>
+
+    <label for="email">Email:</label>
+    <input th:field="*{email}" id="email" type="text"><br>
+
+    <!-- Erros de validação -->
+    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+    <button type="submit">Cadastrar</button>
+    <a th:href="@{/usuarios}">Cancelar</a>
+</form>
+
+<!-- Formulário de edição -->
+<form th:if="${usuario.getId()} != -1" th:action="@{/usuarios/{id}(id=${usuario.getId()})}" method="post" th:object="${usuario}">
+    <input type="hidden" name="_method" value="put"/>
+
+    <label for="nome">Nome:</label>
+    <input th:field="*{nome}" id="nome" type="text" required><br>
+
+    <label for="email">Email:</label>
+    <input th:field="*{email}" id="email" type="text"><br>
+
+    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+    <button type="submit">Atualizar</button>
+    <a th:href="@{/usuarios}">Cancelar</a>
+</form>
+</body>
+</html>
+

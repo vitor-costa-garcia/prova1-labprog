@@ -4,8 +4,7 @@ USE gerenciamento_tarefas;
 
 CREATE TABLE usuario (
 	idUsuario BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100),
-    dataNascimento DATETIME NOT NULL,
+    nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL
 );
 
@@ -16,7 +15,6 @@ CREATE TABLE tarefas (
 	tipo VARCHAR(50) NOT NULL,
 	descricao VARCHAR(200),
 	dataInicio DATETIME NOT NULL,
-	dataFim DATETIME,
 	posx INT NOT NULL,
 	posy INT NOT NULL,
 	comprimento INT NOT NULL,
@@ -29,7 +27,7 @@ CREATE TABLE tarefas (
 	ON DELETE CASCADE
 );
 
-INSERT INTO usuario VALUES (1, "Vitor da Costa", "2006-08-01", "vitorcostagarcia2006@gmail.com");
+INSERT INTO usuario VALUES (1, "Vitor da Costa", "vitorcostagarcia2006@gmail.com");
 
 INSERT INTO tarefas VALUES (1,
 						    1,
@@ -37,7 +35,6 @@ INSERT INTO tarefas VALUES (1,
 							"Geral",
                             "Essa é a descrição da minha tarefa que ficará escrita no postit",
                             "2024-08-08",
-                            null,
                             100,
                             100,
                             100,
@@ -47,3 +44,5 @@ INSERT INTO tarefas VALUES (1,
                            );
 
 SELECT * FROM tarefas;
+
+SELECT * FROM usuario;

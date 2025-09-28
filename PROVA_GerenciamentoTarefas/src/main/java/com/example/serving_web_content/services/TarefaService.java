@@ -25,7 +25,6 @@ public class TarefaService {
         String tipo = tarefa.getTipo();
         String descricao = tarefa.getDescricao();
         String dataInicio = tarefa.getDataInicio();
-        String dataFim = tarefa.getDataFim();
         int posx = tarefa.getPosx();
         int posy = tarefa.getPosy();
         int comprimento = tarefa.getComprimento();
@@ -50,7 +49,6 @@ public class TarefaService {
                               tipo,
                               descricao,
                               dataInicio,
-                              dataFim,
                               posx,
                               posy,
                               comprimento,
@@ -75,7 +73,6 @@ public class TarefaService {
         String tipo = tarefa.getTipo();
         String descricao = tarefa.getDescricao();
         String dataInicio = tarefa.getDataInicio();
-        String dataFim = tarefa.getDataFim();
         int posx = tarefa.getPosx();
         int posy = tarefa.getPosy();
         int comprimento = tarefa.getComprimento();
@@ -101,7 +98,6 @@ public class TarefaService {
             Tarefa.setTipo(tipo);
             Tarefa.setDescricao(descricao);
             Tarefa.setDataInicio(dataInicio);
-            Tarefa.setDataFim(dataFim);
             Tarefa.setPosx(posx);
             Tarefa.setPosy(posy);
             Tarefa.setComprimento(comprimento);

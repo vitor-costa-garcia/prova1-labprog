@@ -19,6 +19,7 @@ function myFunction() {
         if(placingBlanks === true){
             newDay.classList.add("calendar-day-blank")
         } else {
+            newDay.id = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDay()+currentDay}`;
             newDay.classList.add("calendar-day")
             newDay.innerHTML = String(validCurrentDay)
             validCurrentDay++
