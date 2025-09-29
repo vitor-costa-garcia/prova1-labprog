@@ -59,3 +59,11 @@
     background-color: #e8e8e8;
     border: lightgray solid 1px;
 }
+
+.home-date-changer{
+    display: flex;
+    justify-content: space-evenly;
+    width: 80%;
+    margin-left: 10%;
+    padding-top: 1%;
+}

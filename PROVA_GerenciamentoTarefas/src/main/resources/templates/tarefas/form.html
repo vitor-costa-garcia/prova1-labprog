@@ -11,7 +11,7 @@
 <form th:if="${tarefa.getId()} == -1" th:action="@{/tarefas}" method="post" th:object="${tarefa}">
     <label for="idUsuario">Usuário:</label>
     <select th:field="*{idUsuario}" id="idUsuario" required>
-        <option th:each="u: ${usuarios}" th:value="${u.getId()}"></option>
+        <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getId()}"></option>
     </select><br>
 
     <label for="titulo">Titulo:</label>

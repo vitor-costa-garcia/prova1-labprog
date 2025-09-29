@@ -5,6 +5,7 @@ import com.example.serving_web_content.dto.TarefaTam;
 import com.example.serving_web_content.models.Tarefa;
 import com.example.serving_web_content.repository.TarefaRepository;
 import com.example.serving_web_content.services.TarefaService;
+import com.example.serving_web_content.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,13 @@ import java.util.Optional;
 public class TarefaController {
     private final TarefaService tarefaService;
     private final TarefaRepository tarefaRepository;
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public TarefaController(TarefaService tarefaService, TarefaRepository tarefaRepository) {
+    public TarefaController(TarefaService tarefaService, TarefaRepository tarefaRepository, UsuarioService usuarioService) {
         this.tarefaService = tarefaService;
         this.tarefaRepository = tarefaRepository;
+        this.usuarioService = usuarioService;
     }
     @GetMapping
     public String listar(Model model) {
@@ -41,21 +44,34 @@ public class TarefaController {
         return "tarefas/diacalendario";
     }
 
+/*  MAPEAR AS CORES PARA CRIAR OS POSTITS COM AS CORES CORRETAS
+    | CODIGO_COR | COR      | COR_DRAG | COR_BODY |
+    | 0          | AMARELO  | #fff17b  | #fff289  |
+    | 1          | LARANJA  | #ffb06e  | #ffb97e  |
+    | 2          | VERMELHO | #ff6a6a  | #ff7b7b  |
+    | 3          | VERDE    | #82ff7b  | #95ff8f  |
+    | 4          | AZUL     | #80ddff  | #8fe5ff  |
+    | 5          | ROXO     | #ff7bf8  | #ff89fa  |
+*/
+
     @GetMapping("/novo")
     public String abrirCadastro(Model model) {
         Tarefa formTarefa = new Tarefa();
         formTarefa.setId(-1);
         System.out.print(formTarefa.getId());
         model.addAttribute("tarefa", formTarefa);
+        model.addAttribute("usuarios", usuarioService.listar());
         return "tarefas/form";
     }
 
     @PostMapping
     public String cadastrar(@Valid @ModelAttribute Tarefa tarefa,
                             BindingResult erros,
-                            RedirectAttributes ra) {
+                            RedirectAttributes ra,
+                            Model model) {
 
         if (erros.hasErrors()) {
+            model.addAttribute("usuarios", usuarioService.listar());
             return "tarefas/form";
         }
         tarefaService.adicionar(tarefa);
@@ -94,14 +110,17 @@ public class TarefaController {
     @GetMapping("/editar/{id}")
     public String abrirEdicao(@PathVariable Long id, Model model) {
         model.addAttribute("tarefa", tarefaService.listarPorId(Math.toIntExact(id)));
+        model.addAttribute("usuarios", usuarioService.listar());
         return "tarefas/form";
     }
     @PutMapping("/{id}")
     public String atualizar(@PathVariable Long id,
                             @Valid @ModelAttribute Tarefa tarefa,
                             BindingResult erros,
-                            RedirectAttributes ra) {
+                            RedirectAttributes ra,
+                            Model model) {
         if (erros.hasErrors()) {
+            model.addAttribute("usuarios", usuarioService.listar());
             return "tarefas/form";
         }
         tarefaService.atualizar(id, tarefa);
