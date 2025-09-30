@@ -16,6 +16,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,12 +39,36 @@ public class TarefaController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("tarefa", tarefaService.listar());
+        List<String> cores = List.of("Amarelo", "Laranja", "Vermelho", "Verde", "Azul", "Roxo");
+        model.addAttribute("cores", cores);
+        List<String> situacao = List.of("Em andamento", "Concluído");
+        model.addAttribute("situacao", situacao);
+        return "tarefas/lista";
+    }
+
+    @GetMapping("/{idUsuario}")
+    public String listarUsuario(@PathVariable int idUsuario, Model model) {
+        model.addAttribute("tarefa", tarefaService.listarTarefasUsuario(idUsuario));
+        List<String> cores = List.of("Amarelo", "Laranja", "Vermelho", "Verde", "Azul", "Roxo");
+        model.addAttribute("cores", cores);
+        List<String> situacao = List.of("Em andamento", "Concluído");
+        model.addAttribute("situacao", situacao);
         return "tarefas/lista";
     }
 
     @GetMapping("/{idUsuario}/{dataInicio}")
     public String verDia(@PathVariable int idUsuario, @PathVariable String dataInicio, Model model) {
-        model.addAttribute("tarefa", tarefaService.listarTarefasUsuario(idUsuario, dataInicio));
+        List<List<String>> cores = List.of(
+                List.of("#fff17b", "#fff289"),//amarelo
+                List.of("#ffb06e", "#ffb97e"),//laranja
+                List.of("#ff6a6a", "#ff7b7b"),//vermelho
+                List.of("#82ff7b", "#95ff8f"),//verde
+                List.of("#80ddff", "#8fe5ff"),//azul
+                List.of("#ff7bf8", "#ff89fa") //roxo
+        );
+
+        model.addAttribute("cores", cores);
+        model.addAttribute("tarefa", tarefaService.listarTarefasUsuarioData(idUsuario, dataInicio));
         return "tarefas/diacalendario";
     }
 
@@ -55,10 +83,20 @@ public class TarefaController {
 */
 
     @GetMapping("/novo")
-    public String abrirCadastro(Model model) {
+    public String abrirCadastroSemData(Model model) {
+        LocalDate dataAtual = LocalDate.now();
+
+        String yearMonthDay = dataAtual.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        return "redirect:/tarefas/novo/" + yearMonthDay;
+    }
+
+    @GetMapping("/novo/{data}")
+    public String abrirCadastro(@PathVariable String data, Model model) {
         Tarefa formTarefa = new Tarefa();
         formTarefa.setId(-1);
         System.out.print(formTarefa.getId());
+        formTarefa.setDataInicio(data);
         model.addAttribute("tarefa", formTarefa);
         model.addAttribute("usuarios", usuarioService.listar());
         return "tarefas/form";

@@ -1,0 +1,21 @@
+.container-form-tarefa{
+    width: 75%;
+    margin-left: 12.5%;
+}
+
+.container-form-tarefa-select-3{
+    justify-content: space-around !important;
+    display: flex;
+}
+
+.container-form-tarefa-buttons{
+    display: flex;
+    justify-content: center;
+}
+
+.form-tarefa-title{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: 0px;
+}

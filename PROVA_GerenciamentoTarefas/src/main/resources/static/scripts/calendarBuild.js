@@ -1,5 +1,8 @@
 function myFunction() {
 
+    //Data atual
+    const dateNow = new Date();
+
     //Pego a data vinda do caminho ano e mês
     const yearMonth = document.getElementsByClassName("container-home")[0].id
 
@@ -52,15 +55,26 @@ function myFunction() {
         if(placingBlanks === true){
             newDay.classList.add("calendar-day-blank")
         } else { //Se não, coloco uma janela de dia válido com o id representando o dia alvo
-            newDay.id = `${today.getFullYear()}-${today.getMonth()+1}-${validCurrentDay}`;
+            var monthFix = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : `${today.getMonth()+1}`;
+            var dayFix = validCurrentDay < 10 ? `0${validCurrentDay}` : `${validCurrentDay}`;
+            var currentDateString = `${today.getFullYear()}-${today.getMonth()+1}-${validCurrentDay}`
+            newDay.id = `${today.getFullYear()}-${monthFix}-${dayFix}`;
+            const dayNumber = document.createElement("p")
             newDay.classList.add("calendar-day")
-            newDay.innerHTML = String(validCurrentDay)
+            dayNumber.innerHTML = String(validCurrentDay)
+
+            if(currentDateString === `${dateNow.getFullYear()}-${dateNow.getMonth()+1}-${dateNow.getDate()}`){
+                dayNumber.classList.add("day-number-today")
+                newDay.classList.add("calendar-day-today")
+            }
+
+            newDay.appendChild(dayNumber)
             validCurrentDay++
         }
 
         currentWeek.appendChild(newDay)
-        if((currentDay+1)%7===0){
-            week++
+        if((currentDay+1)%7 === 0){
+            week++;
             currentWeek = document.getElementById('calendar-w' + week);
         }
         currentDay++

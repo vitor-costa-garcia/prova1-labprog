@@ -1,120 +1,149 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/styles/task_form.css}" />
+    <link rel="stylesheet" th:href="@{/styles/home.css}">
     <title>Tarefa - Formulário</title>
 </head>
 <body>
-<h1 th:text="${tarefa.getId()} != -1 ? 'Editar Tarefa' : 'Nova Tarefa'"></h1>
+<div class="container-home" th:id="${yearMonth}">
+    <div class="home-header">
+        <div style="display: flex;">
+            <img class="home-logo-img" onclick="window.location.href='/home'" th:src="@{/images/TaskItLogo.png}" alt="TaskIt Logo!">
+            <h3>Task-It !</h3>
+        </div>
+        <div class="home-header-buttons">
+            <a class="btn btn-light" href="/home">Início</a>
+            <a class="btn btn-light" href="/tarefas">Tarefas</a>
+            <a class="btn btn-light" href="/usuarios">Usuários</a>
+        </div>
+    </div>
+</div>
+
+<h1 th:text="${tarefa.getId()} != -1 ? 'Editor de tarefas: Tarefa ID ' + ${tarefa.getId()} : 'Criador de tarefas'" class="form-tarefa-title"></h1>
 
 <!-- Formulário de cadastro -->
-<form th:if="${tarefa.getId()} == -1" th:action="@{/tarefas}" method="post" th:object="${tarefa}">
-    <label for="idUsuario">Usuário:</label>
-    <select th:field="*{idUsuario}" id="idUsuario" required>
-        <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getId()}"></option>
-    </select><br>
+<div class="container-form-tarefa">
+    <form th:if="${tarefa.getId()} == -1" th:action="@{/tarefas}" method="post" th:object="${tarefa}">
+        <label for="idUsuario">Usuário:</label>
+        <select th:field="*{idUsuario}" id="idUsuario" class="form-select" required>
+            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getId()}"></option>
+        </select><br>
 
-    <label for="titulo">Titulo:</label>
-    <input th:field="*{titulo}" id="titulo" type="text" required><br>
+        <label for="titulo">Titulo:</label>
+        <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação" required><br>
 
-    <label for="tipo">Tipo:</label>
-    <input th:field="*{tipo}" id="tipo" type="text"><br>
+        <label for="tipo">Tipo:</label>
+        <input th:field="*{tipo}" id="tipo" class="form-control" placeholder="Ex: Faculdade, Casa, Autocuidado" type="text"><br>
 
-    <label for="descricao">Descrição:</label>
-    <input th:field="*{descricao}" id="descricao" type="text"><br>
+        <label for="descricao">Descrição:</label>
+        <textarea th:field="*{descricao}" id="descricao" class="form-control" style="height: 120px" placeholder="Ex: Terminar os formulários do trabalho"></textarea><br>
 
-    <label for="dataInicio">Data Início:</label>
-    <input th:field="*{dataInicio}" id="dataInicio" type="date"><br>
+        <div class="container-form-tarefa-select-3">
+            <div>
+                <label for="dataInicio">Data Início:</label>
+                <input th:field="*{dataInicio}" id="dataInicio" class="form-control" type="date" th:value="${data}"><br>
+            </div>
+            <div>
+                <label for="cor">Cor PostIt:</label>
+                <select th:field="*{cor}" class="form-select" id="cor" required>
+                    <option value="0">Amarelo</option>
+                    <option value="1">Laranja</option>
+                    <option value="2">Vermelho</option>
+                    <option value="3">Verde</option>
+                    <option value="4">Azul</option>
+                    <option value="5">Roxo</option>
+                </select><br>
+            </div>
 
-    <label for="posx">PosX:</label>
-    <input th:field="*{posx}" id="posx" type="number"><br>
+            <div>
+                <label for="statusTarefa">Status:</label>
+                <select th:field="*{statusTarefa}" class="form-select" id="statusTarefa" required>
+                    <option value="0">Em andamento</option>
+                    <option value="1">Concluído</option>
+                </select><br>
+            </div>
+        </div>
 
-    <label for="posy">PosY:</label>
-    <input th:field="*{posy}" id="posy" type="number"><br>
+        <!-- Erros de validação -->
+        <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
+        <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+        <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+        <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+        <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
+        <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
 
-    <label for="comprimento">Comprimento:</label>
-    <input th:field="*{comprimento}" id="comprimento" type="number"><br>
-
-    <label for="altura">Altura:</label>
-    <input th:field="*{altura}" id="altura" type="number"><br>
-
-    <label for="cor">Cor:</label>
-    <input th:field="*{cor}" id="cor" type="text"><br>
-
-    <label for="statusTarefa">Status:</label>
-    <input th:field="*{statusTarefa}" id="statusTarefa" type="number"><br>
-
-    <!-- Erros de validação -->
-    <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
-    <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
-    <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
-    <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
-    <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
-    <div th:if="${#fields.hasErrors('posx')}" th:errors="*{posx}"></div>
-    <div th:if="${#fields.hasErrors('posy')}" th:errors="*{posy}"></div>
-    <div th:if="${#fields.hasErrors('comprimento')}" th:errors="*{comprimento}"></div>
-    <div th:if="${#fields.hasErrors('altura')}" th:errors="*{altura}"></div>
-    <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
-    <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
-
-
-    <button type="submit">Cadastrar</button>
-    <a th:href="@{/tarefas}">Cancelar</a>
-</form>
+        <div class="container-form-tarefa-buttons">
+            <button type="submit" class="btn btn-success"  style="margin-right: 200px">Cadastrar</button>
+            <a th:href="@{/tarefas}" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
+</div>
 
 <!-- Formulário de edição -->
-<form th:if="${tarefa.getId()} != -1" th:action="@{/tarefas/{id}(id=${tarefa.getId()})}" method="post" th:object="${tarefa}">
-    <input type="hidden" name="_method" value="put"/>
+<div class="container-form-tarefa">
+    <form th:if="${tarefa.getId()} != -1" th:action="@{/tarefas/{id}(id=${tarefa.getId()})}" method="post" th:object="${tarefa}">
+        <input type="hidden" name="_method" value="put"/>
 
-    <label for="idUsuario">ID Usuario:</label>
-    <input th:field="*{idUsuario}" id="idUsuario" type="number" required><br>
+        <label for="idUsuario">Usuário:</label>
+        <select th:field="*{idUsuario}" id="idUsuario" class="form-select" required>
+            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getId()}"></option>
+        </select><br>
 
-    <label for="titulo">Titulo:</label>
-    <input th:field="*{titulo}" id="titulo" type="text" required><br>
+        <label for="titulo">Titulo:</label>
+        <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação" required><br>
 
-    <label for="tipo">Tipo:</label>
-    <input th:field="*{tipo}" id="tipo" type="text"><br>
+        <label for="tipo">Tipo:</label>
+        <input th:field="*{tipo}" id="tipo" class="form-control" placeholder="Ex: Faculdade, Casa, Autocuidado" type="text"><br>
 
-    <label for="descricao">Descrição:</label>
-    <input th:field="*{descricao}" id="descricao" type="text"><br>
+        <label for="descricao">Descrição:</label>
+        <textarea th:field="*{descricao}" id="descricao" class="form-control" style="height: 120px" placeholder="Ex: Terminar os formulários do trabalho"></textarea><br>
 
-    <label for="dataInicio">Data Início:</label>
-    <input th:field="*{dataInicio}" id="dataInicio" type="date"><br>
+        <div class="container-form-tarefa-select-3">
+            <div>
+                <label for="dataInicio">Data Início:</label>
+                <input th:field="*{dataInicio}" id="dataInicio" class="form-control" type="date"><br>
+            </div>
+            <div>
+                <label for="cor">Cor PostIt:</label>
+                <select th:field="*{cor}" class="form-select" id="cor" required>
+                    <option value="0">Amarelo</option>
+                    <option value="1">Laranja</option>
+                    <option value="2">Vermelho</option>
+                    <option value="3">Verde</option>
+                    <option value="4">Azul</option>
+                    <option value="5">Roxo</option>
+                </select><br>
+            </div>
 
-    <label for="posx">PosX:</label>
-    <input th:field="*{posx}" id="posx" type="number"><br>
+            <div>
+                <label for="statusTarefa">Status:</label>
+                <select th:field="*{statusTarefa}" class="form-select" id="statusTarefa" required>
+                    <option value="0">Em andamento</option>
+                    <option value="1">Concluído</option>
+                </select><br>
+            </div>
+        </div>
 
-    <label for="posy">PosY:</label>
-    <input th:field="*{posy}" id="posy" type="number"><br>
+        <!-- Erros de validação -->
+        <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
+        <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+        <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+        <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+        <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
+        <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
 
-    <label for="comprimento">Comprimento:</label>
-    <input th:field="*{comprimento}" id="comprimento" type="number"><br>
-
-    <label for="altura">Altura:</label>
-    <input th:field="*{altura}" id="altura" type="number"><br>
-
-    <label for="cor">Cor:</label>
-    <input th:field="*{cor}" id="cor" type="text"><br>
-
-    <label for="statusTarefa">Status:</label>
-    <input th:field="*{statusTarefa}" id="statusTarefa" type="number"><br>
-
-    <!-- Erros de validação -->
-    <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
-    <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
-    <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
-    <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
-    <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
-    <div th:if="${#fields.hasErrors('posx')}" th:errors="*{posx}"></div>
-    <div th:if="${#fields.hasErrors('posy')}" th:errors="*{posy}"></div>
-    <div th:if="${#fields.hasErrors('comprimento')}" th:errors="*{comprimento}"></div>
-    <div th:if="${#fields.hasErrors('altura')}" th:errors="*{altura}"></div>
-    <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
-    <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
-
-    <button type="submit">Atualizar</button>
-    <a th:href="@{/tarefas}">Cancelar</a>
-</form>
+        <div class="container-form-tarefa-buttons">
+            <button type="submit" class="btn btn-success" style="margin-right: 200px">Atualizar</button>
+            <a th:href="@{/tarefas}" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
 

@@ -67,3 +67,18 @@
     margin-left: 10%;
     padding-top: 1%;
 }
+
+.day-number-today{
+    width: fit-content;
+    border-radius: 15px;
+}
+
+.calendar-day-today{
+    width: 14.2857%;
+    padding-left: 10px;
+    aspect-ratio: 1.8/1;
+    font-weight: bold;
+    background-color: #f6f6f6;
+    border: #fff289 solid 5px;
+    transition: 0.2s ease-in-out;
+}

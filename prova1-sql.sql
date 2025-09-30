@@ -14,7 +14,7 @@ CREATE TABLE tarefas (
 	titulo VARCHAR(100) NOT NULL UNIQUE,
 	tipo VARCHAR(50) NOT NULL,
 	descricao VARCHAR(200),
-	dataInicio DATETIME NOT NULL,
+	dataInicio DATE NOT NULL,
 	posx INT NOT NULL,
 	posy INT NOT NULL,
 	comprimento INT NOT NULL,

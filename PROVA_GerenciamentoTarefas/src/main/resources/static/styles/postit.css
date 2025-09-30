@@ -1,3 +1,7 @@
+body{
+    background: #fafafa;
+}
+
 .task-postit-1{
     width: 200px;
     height: 200px;
@@ -29,9 +33,6 @@
     border: none;
     outline: none;
     resize: none;
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-top: 2%;
     scrollbar-width: none;
     padding: 10px;
 }
@@ -55,4 +56,43 @@
     right: 0;
     bottom: 0;
     cursor: se-resize;
+}
+
+.date-text-tarefas{
+    position: absolute;
+    bottom: 5px;
+    left: 1%;
+    display: flex;
+    justify-content: space-between;
+    width: 99%;
+}
+
+.home-logo-img-calendarday{
+    width: 80px;
+    height: 80px;
+}
+
+.home-logo-img-calendarday-text{
+    transform: rotate(-90deg);
+    margin-left: 20px;
+    color: #676767;
+}
+
+.home-logo-img-calendarday-container{
+    display: flex;
+    position: absolute;
+    top: 10px;
+    left: -76px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: white;
+    border-color: #676767;
+    border-style: solid;
+    border-width: 1px;
+    width: 110px;
+}
+
+.home-logo-img-calendarday-container:hover{
+    left: 0px;
+    transition: left 0.5s;
 }

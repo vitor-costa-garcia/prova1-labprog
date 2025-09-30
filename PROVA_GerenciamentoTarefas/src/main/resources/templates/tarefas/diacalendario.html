@@ -6,15 +6,25 @@
     <link rel="stylesheet" th:href="@{/styles/postit.css}">
 </head>
 <body>
-<h1>Tarefas</h1>
+<div class="home-logo-img-calendarday-container">
+    <img onclick="window.location.href='/home'" class="home-logo-img-calendarday" th:src="@{/images/TaskItLogo.png}" alt="TaskIt Logo!">
+    <div class="home-logo-img-calendarday-text">Início</div>
+</div>
+<div class="date-text-tarefas">
+    <h3 th:text="'Data: ' + ${dataInicio}"></h3>
+    <span style="display: flex; justify-content: space-around; width: 500px;">
+        <p><a th:href="@{/tarefas/novo/{data}(data=${dataInicio})}" class="btn btn-dark">Nova Tarefa</a></p>
+        <p><a th:href="@{/tarefas/1}" class="btn btn-dark">Gerenciar Tarefas</a></p>
+        <p><a onclick="startResize()" class="btn btn-secondary">Enfileirar tarefas</a></p>
+    </span>
+</div>
 <!−− Mensagem de sucesso −−>
 <p th:if="${msg}" th:text="${msg}"></p>
-<p><a th:href="@{/tarefas/novo}">Nova Tarefa</a></p>
 
     <div th:each="c : ${tarefa}" class="task-postit-1" th:id="${c.getId()}" th:style="'left:' + ${c.posx} + 'px; top:' + ${c.posy} + 'px; width:' + ${c.comprimento} + 'px; height:' + ${c.altura} + 'px; position:absolute;'">
-        <div class="task-postit-top-1" id="task-postit-drag"></div>
-        <div class="task-postit-body-1">
-            <textarea class="task-postit-textarea" rows="5" th:text="${c.descricao}" ></textarea>
+        <div class="task-postit-top-1" id="task-postit-drag" th:styleappend="'background-color:'+${cores[c.cor][1]}"></div>
+        <div class="task-postit-body-1" th:styleappend="'background-color:'+${cores[c.cor][0]}">
+            <div class="task-postit-textarea" th:text="${c.descricao}" ></div>
         </div>
         <div class="resize-handle"></div>
     </div>
@@ -23,6 +33,7 @@
 </body>
 <script src="/scripts/dragPostit.js"></script>
 <script src="/scripts/resizePostit.js"></script>
+<script src="/scripts/organizePostit.js"></script>
 </html>
 
 <!--

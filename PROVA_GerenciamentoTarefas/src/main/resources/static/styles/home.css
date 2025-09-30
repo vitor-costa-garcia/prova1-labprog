@@ -23,7 +23,7 @@ body{
 }
 
 .home-header-buttons{
-    width: 500px;
+    width: 400px;
     justify-content: space-between;
     display: flex;
 }
@@ -59,4 +59,5 @@ body{
 .home-logo-img{
     width: 40px;
     height: 40px;
+    cursor: pointer;
 }

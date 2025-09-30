@@ -118,7 +118,11 @@ public class TarefaService {
         return TarefaRepository.findById((long) id).orElse(null);
     }
 
-    public List<Tarefa> listarTarefasUsuario(int idUsuario, String dataInicio) {
+    public List<Tarefa> listarTarefasUsuarioData(int idUsuario, String dataInicio) {
         return TarefaRepository.findByIdUsuarioAndDataInicio(idUsuario, dataInicio);
+    }
+
+    public List<Tarefa> listarTarefasUsuario(int idUsuario) {
+        return TarefaRepository.findByIdUsuario(idUsuario);
     }
 }

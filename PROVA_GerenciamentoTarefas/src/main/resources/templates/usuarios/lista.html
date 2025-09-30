@@ -4,34 +4,55 @@
     <meta charset="UTF−8"><title>Usuários − Lista</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/styles/postit.css}">
+    <link rel="stylesheet" th:href="@{/styles/task_list.css}">
+    <link rel="stylesheet" th:href="@{/styles/home.css}">
 </head>
 <body>
-<h1>Usuários</h1>
+<div class="container-home" th:id="${yearMonth}">
+    <div class="home-header">
+        <div style="display: flex;">
+            <img class="home-logo-img" onclick="window.location.href='/home'" th:src="@{/images/TaskItLogo.png}" alt="TaskIt Logo!">
+            <h3>Task-It !</h3>
+        </div>
+        <div class="home-header-buttons">
+            <a class="btn btn-light" href="/home">Início</a>
+            <a class="btn btn-light" href="/tarefas">Tarefas</a>
+            <a class="btn btn-light" href="/usuarios">Usuários</a>
+        </div>
+    </div>
+</div>
+<h1 class="lista-tarefa-title">Usuários</h1>
+
 <!−− Mensagem de sucesso −−>
 <p th:if="${msg}" th:text="${msg}"></p>
+
 <p><a th:href="@{/usuarios/novo}">Novo Usuário</a></p>
-<table>
-    <tr>
-        <th>ID Usuário</th>
-        <th>Nome</th>
-        <th>Email</th>
-        <th>Ações</th>
-    </tr>
-    <tr th:each="c : ${usuario}">
-        <td th:text="${c.id}"></td>
-        <td th:text="${c.nome}"></td>
-        <td th:text="${c.email}"></td>
-        <td>
-            <form th:action="@{/usuarios/editar/{id}(id=${c.getId()})}" method="get">
-                <button type="submit">Editar</button>
-            </form>
-            <form th:action="@{/usuarios/{idUsuario}(idUsuario=${c.getId()})}" method="post">
-                <input type="hidden" name="_method" value="delete"/>
-                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-            </form>
-        </td>
-    </tr>
-</table>
+<div class="tabela-tarefa-container">
+    <table class="tabela-tarefa">
+        <tr class="tabela-tarefa-header">
+            <th >ID Usuário</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+        <tr th:each="c : ${usuario}" class="tabela-tarefa-row">
+            <td th:text="${c.id}"></td>
+            <td th:text="${c.nome}"></td>
+            <td th:text="${c.email}"></td>
+            <td>
+                <div class="tabela-tarefa-button-acao">
+                    <form th:action="@{/usuarios/editar/{id}(id=${c.getId()})}" method="get">
+                        <button type="submit" class="btn btn-secondary" style="margin-right:10px">Editar</button>
+                    </form>
+                    <form th:action="@{/usuarios/{idUsuario}(idUsuario=${c.getId()})}" method="post" class="btn btn-danger btn-sm">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" style="border: transparent; background-color: transparent; color: white">Excluir</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -4,61 +4,66 @@
     <meta charset="UTF−8"><title>Tarefas − Lista</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/styles/postit.css}">
+    <link rel="stylesheet" th:href="@{/styles/task_list.css}">
+    <link rel="stylesheet" th:href="@{/styles/home.css}">
 </head>
 <body>
-<h1>Tarefas</h1>
+
+<div class="container-home" th:id="${yearMonth}">
+    <div class="home-header">
+        <div style="display: flex;">
+            <img class="home-logo-img" onclick="window.location.href='/home'" th:src="@{/images/TaskItLogo.png}" alt="TaskIt Logo!">
+            <h3>Task-It !</h3>
+        </div>
+        <div class="home-header-buttons">
+            <a class="btn btn-light" href="/home">Início</a>
+            <a class="btn btn-light" href="/tarefas">Tarefas</a>
+            <a class="btn btn-light" href="/usuarios">Usuários</a>
+        </div>
+    </div>
+</div>
+
+<h1 class="lista-tarefa-title">Listagem de tarefas</h1>
 <!−− Mensagem de sucesso −−>
 <p th:if="${msg}" th:text="${msg}"></p>
-<p><a th:href="@{/tarefas/novo}">Nova Tarefa</a></p>
-<table>
-    <tr>
-        <th>Usuário</th>
-        <th>Título</th>
-        <th>Tipo</th>
-        <th>Descrição</th>
-        <th>Data início</th>
-        <th>Data fim</th>
-        <th>PosX</th>
-        <th>PosY</th>
-        <th>Comprimento</th>
-        <th>Altura</th>
-        <th>Cor</th>
-        <th>Status tarefa</th>
-        <th>Ações</th>
-    </tr>
+<div class="tabela-tarefa-container">
 
-    <div th:each="c : ${tarefa}" class="task-postit-1" th:id="${c.getId()}" th:style="'left:' + ${c.posx} + 'px; top:' + ${c.posy} + 'px; width:' + ${c.comprimento} + 'px; height:' + ${c.altura} + 'px; position:absolute;'">
-        <div class="task-postit-top-1" id="task-postit-drag"></div>
-        <div class="task-postit-body-1">
-            <textarea class="task-postit-textarea" rows="5" th:text="${c.descricao}" ></textarea>
-        </div>
-        <div class="resize-handle"></div>
-    </div>
+    <table class="tabela-tarefa">
+        <tr class="tabela-tarefa-header">
+            <th>Usuário</th>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+            <th>Data início</th>
+            <th>Cor</th>
+            <th>Status tarefa</th>
+            <th>Ações</th>
+        </tr>
 
-    <tr th:each="c : ${tarefa}">
-        <td th:text="${c.idUsuario}"></td>
-        <td th:text="${c.titulo}"></td>
-        <td th:text="${c.tipo}"></td>
-        <td th:text="${c.descricao}"></td>
-        <td th:text="${c.dataInicio}"></td>
-        <td th:text="${c.dataFim}"></td>
-        <td th:text="${c.posx}"></td>
-        <td th:text="${c.posy}"></td>
-        <td th:text="${c.comprimento}"></td>
-        <td th:text="${c.altura}"></td>
-        <td th:text="${c.cor}"></td>
-        <td th:text="${c.statusTarefa}"></td>
-        <td>
-            <form th:action="@{/tarefas/editar/{id}(id=${c.getId()})}" method="get">
-                <button type="submit">Editar</button>
-            </form>
-            <form th:action="@{/tarefas/{idTarefa}(idTarefa=${c.getId()})}" method="post">
-                <input type="hidden" name="_method" value="delete"/>
-                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-            </form>
-        </td>
-    </tr>
-</table>
+        <tr th:each="c : ${tarefa}" class="tabela-tarefa-row">
+            <td th:text="${c.idUsuario}"></td>
+            <td th:text="${c.titulo.length() > 20} ? ${c.titulo.substring(0, 20)} + '...' : ${c.titulo}"></td>
+            <td th:text="${c.tipo}"></td>
+            <td th:text="${c.descricao.length() > 40} ? ${c.descricao.substring(0, 40)} + '...' : ${c.descricao}"></td>
+            <td th:text="${c.dataInicio}"></td>
+            <td th:text="${cores[c.cor]}"></td>
+            <td th:text="${situacao[c.statusTarefa]}"
+                th:style="${c.statusTarefa == 0} ? 'color:black' : 'color:green'">
+            </td>
+            <td>
+                <div class="tabela-tarefa-button-acao">
+                    <form th:action="@{/tarefas/editar/{id}(id=${c.getId()})}" method="get">
+                        <button type="submit" class="btn btn-secondary" style="margin-right:10px">Editar</button>
+                    </form>
+                    <form th:action="@{/tarefas/{idTarefa}(idTarefa=${c.getId()})}" method="post" class="btn btn-danger btn-sm">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" style="border: transparent; background-color: transparent; color: white">Excluir</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 <script src="/scripts/dragPostit.js"></script>
