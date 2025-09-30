@@ -80,4 +80,14 @@ public class UsuarioService {
     public Usuario listarPorId(int id) {
         return UsuarioRepository.findById((long) id).orElse(null);
     }
+
+    public List<Usuario> listarPorUsuario(Usuario usuario) {
+        return UsuarioRepository.findByEmailContainingIgnoreCaseAndNomeContainingIgnoreCase(
+                usuario.getEmail() != null ? usuario.getEmail() : "",
+                usuario.getNome() != null ? usuario.getNome() : ""
+        );
+    }
+
+
+
 }

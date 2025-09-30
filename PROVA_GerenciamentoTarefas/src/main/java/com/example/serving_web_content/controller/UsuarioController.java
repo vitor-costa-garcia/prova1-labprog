@@ -18,16 +18,23 @@ import java.util.Optional;
 @RequestMapping("/usuarios")
 public class UsuarioController {
     private final UsuarioService usuarioService;
-    private final UsuarioRepository usuarioRepository;
 
     @Autowired
     public UsuarioController(UsuarioService usuarioService, UsuarioRepository usuarioRepository) {
         this.usuarioService = usuarioService;
-        this.usuarioRepository = usuarioRepository;
     }
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("usuario", usuarioService.listar());
+    public String listar(Model model, @ModelAttribute Usuario usuario) {
+        model.addAttribute("usuariosNoFilter", usuarioService.listar());
+        model.addAttribute("usuarioFilter", usuario); // reuse the one from form
+
+        if ((usuario.getNome() == null || usuario.getNome().isBlank()) &&
+                (usuario.getEmail() == null || usuario.getEmail().isBlank())) {
+            model.addAttribute("usuariosLista", usuarioService.listar());
+        } else {
+            model.addAttribute("usuariosLista", usuarioService.listarPorUsuario(usuario));
+        }
+
         return "usuarios/lista";
     }
 

@@ -1,5 +1,5 @@
 function startResize() {
-    var offsetX = 0;
+    var offsetX = 1;
     var offsetY = 0;
     const postIts = document.getElementsByClassName("task-postit-1");
 
@@ -9,7 +9,7 @@ function startResize() {
         postIt.style.height = "200px";
         postIt.style.left = offsetX * 200 + "px";
         postIt.style.top = offsetY * 200 + "px";
-        if (offsetX === 8) {
+        if (offsetX === 6) {
             offsetY++;
             offsetX = 0;
         } else {

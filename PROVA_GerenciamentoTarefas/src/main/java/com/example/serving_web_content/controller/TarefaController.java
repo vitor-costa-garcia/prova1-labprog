@@ -1,8 +1,10 @@
 package com.example.serving_web_content.controller;
 
+import com.example.serving_web_content.dto.TarefaFiltro;
 import com.example.serving_web_content.dto.TarefaPos;
 import com.example.serving_web_content.dto.TarefaTam;
 import com.example.serving_web_content.models.Tarefa;
+import com.example.serving_web_content.models.Usuario;
 import com.example.serving_web_content.repository.TarefaRepository;
 import com.example.serving_web_content.services.TarefaService;
 import com.example.serving_web_content.services.UsuarioService;
@@ -36,27 +38,24 @@ public class TarefaController {
         this.usuarioService = usuarioService;
     }
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("tarefa", tarefaService.listar());
+    public String listar(Model model, @ModelAttribute TarefaFiltro tarefa) {
+        model.addAttribute("tarefasNoFilter", tarefaService.listar());
         List<String> cores = List.of("Amarelo", "Laranja", "Vermelho", "Verde", "Azul", "Roxo");
         model.addAttribute("cores", cores);
+        model.addAttribute("tarefaFilter", tarefa);
+        model.addAttribute("tarefas", tarefaService.listarTarefasFiltradas(tarefa));
         List<String> situacao = List.of("Em andamento", "Concluído");
         model.addAttribute("situacao", situacao);
-        return "tarefas/lista";
-    }
-
-    @GetMapping("/{idUsuario}")
-    public String listarUsuario(@PathVariable int idUsuario, Model model) {
-        model.addAttribute("tarefa", tarefaService.listarTarefasUsuario(idUsuario));
-        List<String> cores = List.of("Amarelo", "Laranja", "Vermelho", "Verde", "Azul", "Roxo");
-        model.addAttribute("cores", cores);
-        List<String> situacao = List.of("Em andamento", "Concluído");
-        model.addAttribute("situacao", situacao);
+        model.addAttribute("usuariosList", usuarioService.listar());
         return "tarefas/lista";
     }
 
     @GetMapping("/{idUsuario}/{dataInicio}")
-    public String verDia(@PathVariable int idUsuario, @PathVariable String dataInicio, Model model) {
+    public String verDia(@PathVariable int idUsuario, @PathVariable String dataInicio, Model model, @ModelAttribute TarefaFiltro tarefa) {
+        tarefa.setIdUsuario(idUsuario);
+        tarefa.setDataInicio(dataInicio);
+        List<Tarefa> tarefasFiltradas = tarefaService.listarTarefasFiltradas(tarefa);
+
         List<List<String>> cores = List.of(
                 List.of("#fff17b", "#fff289"),//amarelo
                 List.of("#ffb06e", "#ffb97e"),//laranja
@@ -65,9 +64,10 @@ public class TarefaController {
                 List.of("#80ddff", "#8fe5ff"),//azul
                 List.of("#ff7bf8", "#ff89fa") //roxo
         );
-
+        model.addAttribute("tarefaFilter", tarefa);
+        model.addAttribute("tarefas", tarefasFiltradas);
         model.addAttribute("cores", cores);
-        model.addAttribute("tarefa", tarefaService.listarTarefasUsuarioData(idUsuario, dataInicio));
+        model.addAttribute("tarefasNoFilter", tarefaService.listarTarefasUsuarioData(idUsuario, dataInicio));
         return "tarefas/diacalendario";
     }
 

@@ -60,11 +60,12 @@ body{
 
 .date-text-tarefas{
     position: absolute;
-    bottom: 5px;
+    bottom: 10px;
     left: 1%;
     display: flex;
     justify-content: space-between;
     width: 99%;
+    height: 37px;
 }
 
 .home-logo-img-calendarday{
