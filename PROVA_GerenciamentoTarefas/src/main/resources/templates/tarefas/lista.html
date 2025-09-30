@@ -25,7 +25,7 @@
 
 <h1 class="lista-tarefa-title">Listagem de tarefas</h1>
 <!−− Mensagem de sucesso −−>
-<p th:if="${msg}" th:text="${msg}"></p>
+<p th:if="${msg}" th:text="${msg}" class="lista-success-warning"></p>
 <div class="tabela-tarefa-container">
 
     <table class="tabela-tarefa">
@@ -53,7 +53,7 @@
             <td>
                 <div class="tabela-tarefa-button-acao">
                     <form th:action="@{/tarefas/editar/{id}(id=${c.getId()})}" method="get">
-                        <button type="submit" class="btn btn-secondary" style="margin-right:10px">Editar</button>
+                        <button type="submit" class="btn btn-secondary">Editar</button>
                     </form>
                     <form th:action="@{/tarefas/{idTarefa}(idTarefa=${c.getId()})}" method="post" class="btn btn-danger btn-sm">
                         <input type="hidden" name="_method" value="delete"/>

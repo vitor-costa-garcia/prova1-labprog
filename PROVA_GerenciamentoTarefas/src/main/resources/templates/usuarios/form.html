@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Usuário - Formulário</title>
-    <link rel="stylesheet" th:href="@{/styles/home.css}">
     <link rel="stylesheet" th:href="@{/styles/task_form.css}">
+    <link rel="stylesheet" th:href="@{/styles/home.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
@@ -45,21 +45,26 @@
 </div>
 
 <!-- Formulário de edição -->
+<div class="container-form-tarefa">
 <form th:if="${usuario.getId()} != -1" th:action="@{/usuarios/{id}(id=${usuario.getId()})}" method="post" th:object="${usuario}">
     <input type="hidden" name="_method" value="put"/>
 
     <label for="nome">Nome:</label>
-    <input th:field="*{nome}" id="nome" type="text" required><br>
+    <input th:field="*{nome}" class="form-control" id="nome" type="text" required><br>
 
     <label for="email">Email:</label>
-    <input th:field="*{email}" id="email" type="text"><br>
+    <input th:field="*{email}" class="form-control" id="email" type="text"><br>
 
+    <!-- Erros de validação -->
     <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
     <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 
-    <button type="submit">Atualizar</button>
-    <a th:href="@{/usuarios}">Cancelar</a>
+    <div class="container-form-tarefa-buttons">
+        <button type="submit" class="btn btn-primary" style="margin-right: 200px">Atualizar</button>
+        <a th:href="@{/usuarios}" class="btn btn-danger">Cancelar</a>
+    </div>
 </form>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

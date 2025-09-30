@@ -24,9 +24,9 @@
 <h1 class="lista-tarefa-title">Usuários</h1>
 
 <!−− Mensagem de sucesso −−>
-<p th:if="${msg}" th:text="${msg}"></p>
+<p th:if="${msg}" th:text="${msg}" class="lista-success-warning"></p>
 
-<p><a th:href="@{/usuarios/novo}">Novo Usuário</a></p>
+<p><a class="btn btn-dark" th:href="@{/usuarios/novo}" style="margin-left: 8%">Novo Usuário</a></p>
 <div class="tabela-tarefa-container">
     <table class="tabela-tarefa">
         <tr class="tabela-tarefa-header">
