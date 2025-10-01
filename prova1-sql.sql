@@ -4,8 +4,8 @@ USE gerenciamento_tarefas;
 
 CREATE TABLE usuario (
 	idUsuario BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(150) NOT NULL UNIQUE
 );
 
 CREATE TABLE tarefas (
@@ -28,21 +28,3 @@ CREATE TABLE tarefas (
 );
 
 INSERT INTO usuario VALUES (1, "Vitor da Costa", "vitorcostagarcia2006@gmail.com");
-
-INSERT INTO tarefas VALUES (1,
-						    1,
-                            "Titulogenerico",
-							"Geral",
-                            "Essa é a descrição da minha tarefa que ficará escrita no postit",
-                            "2024-08-08",
-                            100,
-                            100,
-                            100,
-                            100,
-                            0,
-                            0
-                           );
-
-SELECT * FROM tarefas;
-
-SELECT * FROM usuario;

@@ -1,12 +1,15 @@
 package com.example.serving_web_content.services;
 
 import com.example.serving_web_content.dto.TarefaFiltro;
+import com.example.serving_web_content.models.Usuario;
 import com.example.serving_web_content.repository.TarefaRepository;
+import com.example.serving_web_content.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.example.serving_web_content.models.Tarefa;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TarefaService {
     private final TarefaRepository TarefaRepository;
+    private final UsuarioRepository UsuarioRepository;
 
-    public TarefaService(TarefaRepository TarefaRepository) {
+    public TarefaService(TarefaRepository TarefaRepository, UsuarioRepository usuarioRepository) {
         this.TarefaRepository = TarefaRepository;
+        this.UsuarioRepository = usuarioRepository;
     }
 
     public ResponseEntity<Tarefa> adicionar(Tarefa tarefa) {
@@ -30,36 +35,53 @@ public class TarefaService {
         int posy = tarefa.getPosy();
         int comprimento = tarefa.getComprimento();
         int altura = tarefa.getAltura();
-        int cor = tarefa.getCor();
-        int statusTarefa = tarefa.getStatusTarefa();
+        Integer cor = tarefa.getCor();
+        Integer statusTarefa = tarefa.getStatusTarefa();
 
+        List<Usuario> usuariosAvailable = UsuarioRepository.findAll();
+        List<Integer> usuarioIds = new ArrayList<>();
+        for (Usuario u : usuariosAvailable) {
+            usuarioIds.add(u.getId());
+        }
+
+        List<Tarefa> titulosAvailable = TarefaRepository.findAll();
+        List<String> titulosUsed = new ArrayList<>();
+        for (Tarefa t : titulosAvailable) {
+            titulosUsed.add(t.getTitulo());
+        }
 
         //Validações
         if (idUsuario == null) { // Validação de usuário
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("O usuário não pode ser nulo.");
+        }
+        if(!usuarioIds.contains(idUsuario)) {
+            throw new IllegalArgumentException("O usuário deve existir.");
         }
         if (titulo == null || titulo.isEmpty()) { // Validação de titulo
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("O título não pode estar vazio.");
+        }
+        if (titulosUsed.contains(titulo)) {
+            throw new IllegalArgumentException("O título fornecido já foi usado.");
         }
         if (tipo == null || tipo.isEmpty()) { // Validação de tipo
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("O tipo não pode estar vazio.");
         }
         if (descricao == null || descricao.isEmpty()) { // Validação de descrição
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("A descrição não pode estar vazia.");
         }
         if (dataInicio == null || dataInicio.isEmpty()) { // Validação de data
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("A data não pode ser nula.");
         }
         for(int i = 0; i < dataInicio.length(); i++) { //Validação de data por caracter
             if(Character.isLetter(dataInicio.charAt(i))){
-                return ResponseEntity.badRequest().build();
+                throw new IllegalArgumentException("A data não pode conter letras");
             }
         }
         if(cor<0 || cor>5){ //Validacao de cor da tarefa
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Cor inexistente.");
         }
         if(statusTarefa != 0 && statusTarefa != 1){ //Validação de status da tarefa
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Status inexistente.");
         }
 
         Tarefa c = new Tarefa(idTarefa,
@@ -81,11 +103,11 @@ public class TarefaService {
 
     @Transactional
     public ResponseEntity<String> remover(Integer idTarefa) {
-        TarefaRepository.deleteByIdTarefa((long) idTarefa);
+        TarefaRepository.deleteByIdTarefa(idTarefa);
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<Tarefa> atualizar(Long index, @Valid Tarefa tarefa) {
+    public ResponseEntity<Tarefa> atualizar(Integer index, @Valid Tarefa tarefa) {
         Integer idTarefa = tarefa.getId();
         Integer idUsuario = tarefa.getIdUsuario();
         String titulo = tarefa.getTitulo();
@@ -96,38 +118,63 @@ public class TarefaService {
         int posy = tarefa.getPosy();
         int comprimento = tarefa.getComprimento();
         int altura = tarefa.getAltura();
-        int cor = tarefa.getCor();
-        int statusTarefa = tarefa.getStatusTarefa();
+        Integer cor = tarefa.getCor();
+        Integer statusTarefa = tarefa.getStatusTarefa();
+
+        List<Usuario> usuariosAvailable = UsuarioRepository.findAll();
+        List<Integer> usuarioIds = new ArrayList<>();
+        for (Usuario u : usuariosAvailable) {
+            usuarioIds.add(u.getId());
+        }
+
+        List<Tarefa> titulosAvailable = TarefaRepository.findAll();
+        List<List<String>> titulosUsed = new ArrayList<>();
+
+        for (Tarefa t : titulosAvailable) {
+            List<String> entry = new ArrayList<>();
+            entry.add(t.getTitulo());
+            entry.add(String.valueOf(t.getId()));
+            titulosUsed.add(entry);
+        }
 
         //Validações
-        if (idTarefa == null) { //validação de idtarefa
-            return ResponseEntity.badRequest().build();
-        }
         if (idUsuario == null) { // Validação de usuário
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("O usuário não pode ser nulo.");
+        }
+        if(!usuarioIds.contains(idUsuario)) {
+            throw new IllegalArgumentException("O usuário deve existir.");
         }
         if (titulo == null || titulo.isEmpty()) { // Validação de titulo
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("O título não pode estar vazio.");
+        }
+        for (List<String> entry : titulosUsed) {
+            String existingTitulo = entry.get(0);
+            Integer existingIdTarefa = Integer.valueOf(entry.get(1));
+            if (existingTitulo.equals(titulo)) {
+                if (!existingIdTarefa.equals(index)) {
+                    throw new IllegalArgumentException("O título fornecido já foi usado.");
+                }
+            }
         }
         if (tipo == null || tipo.isEmpty()) { // Validação de tipo
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("O tipo não pode estar vazio.");
         }
         if (descricao == null || descricao.isEmpty()) { // Validação de descrição
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("A descrição não pode estar vazia.");
         }
         if (dataInicio == null || dataInicio.isEmpty()) { // Validação de data
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("A data não pode ser nula.");
         }
         for(int i = 0; i < dataInicio.length(); i++) { //Validação de data por caracter
             if(Character.isLetter(dataInicio.charAt(i))){
-                return ResponseEntity.badRequest().build();
+                throw new IllegalArgumentException("A data não pode conter letras");
             }
         }
         if(cor<0 || cor>5){ //Validacao de cor da tarefa
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Cor inexistente.");
         }
         if(statusTarefa != 0 && statusTarefa != 1){ //Validação de status da tarefa
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Status inexistente.");
         }
 
         // Busca o tarefa existente

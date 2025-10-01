@@ -1,8 +1,7 @@
 package com.example.serving_web_content.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -15,6 +14,7 @@ public class Tarefa {
     private Integer idTarefa;
 
     //chave estrangeira
+    @NotNull(message = "O usuário não pode ser nulo.")
     @Column(name="idUsuario", nullable = false)
     private Integer idUsuario;
 
@@ -24,7 +24,7 @@ public class Tarefa {
     private String titulo;
 
     @NotBlank(message = "O tipo não pode ser nulo")
-    @Size(max = 150, message = "O tipo deve ter no máximo 50 caracteres")
+    @Size(max = 50, message = "O tipo deve ter no máximo 100 caracteres")
     @Column(name="tipo", nullable = false, unique = false, length = 50)
     private String tipo;
 
@@ -51,15 +51,22 @@ public class Tarefa {
     @Column(name="altura", nullable = false)
     private int altura;
 
-    @Column(name="cor", nullable = false, unique = false)
-    private int cor;
 
+    @Min(value = 0, message = "Selecione uma das cores pré-definidas no formulário" )
+    @Max(value = 5, message = "Selecione uma das cores pré-definidas no formulário")
+    @NotNull(message = "A cor não pode ser nula.")
+    @Column(name="cor", nullable = false, unique = false)
+    private Integer cor;
+
+    @Min(value = 0, message = "Selecione um dos status pré-definidos no formulário" )
+    @Max(value = 1, message = "Selecione um dos status pré-definidos no formulário")
+    @NotNull(message = "O status não pode ser nulo.")
     @Column(name="statusTarefa", nullable = false)
-    private int statusTarefa;
+    private Integer statusTarefa;
 
 
     public Tarefa(Integer idTarefa,
-                  int idUsuario,
+                  Integer idUsuario,
                   String titulo,
                   String tipo,
                   String descricao,
@@ -68,8 +75,8 @@ public class Tarefa {
                   int posy,
                   int comprimento,
                   int altura,
-                  int cor,
-                  int statusTarefa) {
+                  Integer cor,
+                  Integer statusTarefa) {
         this.idTarefa = idTarefa;
         this.idUsuario = idUsuario;
         this.titulo = titulo;
@@ -100,8 +107,8 @@ public class Tarefa {
     public int     getPosy(){ return posy; }
     public int     getComprimento(){ return comprimento; }
     public int     getAltura(){ return altura; }
-    public int     getCor(){ return cor; }
-    public int     getStatusTarefa(){ return statusTarefa; }
+    public Integer getCor(){ return cor; }
+    public Integer getStatusTarefa(){ return statusTarefa; }
 
 
     public void setId(Integer idTarefa){ this.idTarefa = idTarefa; }
@@ -114,7 +121,7 @@ public class Tarefa {
     public void setPosy(int posy){ this.posy = posy; }
     public void setComprimento(int comprimento){ this.comprimento = comprimento; }
     public void setAltura(int altura){ this.altura = altura; }
-    public void setCor(int cor){ this.cor = cor; }
-    public void setStatusTarefa(int statusTarefa){ this.statusTarefa = statusTarefa; }
+    public void setCor(Integer cor){ this.cor = cor; }
+    public void setStatusTarefa(Integer statusTarefa){ this.statusTarefa = statusTarefa; }
 // getters e setters
 }

@@ -25,7 +25,7 @@
 
     <div class="home-date-changer">
         <h3><a th:href="@{/home/{ym}(ym=${yearMonthLast})}" class="btn btn-dark"><</a></h3>
-        <button type="button" class="calendar-date-changer-button" data-bs-toggle="modal" data-bs-target="#exampleModal"><h3 th:text="${yearMonth}"></h3></button>
+        <button type="button" class="calendar-date-changer-button" data-bs-toggle="modal" data-bs-target="#exampleModal" th:text="${yearMonth}"></button>
         <h3><a th:href="@{/home/{ym}(ym=${yearMonthNext})}" class="btn btn-dark">></a></h3>
     </div>
 

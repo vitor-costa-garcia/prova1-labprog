@@ -9,6 +9,7 @@ import com.example.serving_web_content.repository.TarefaRepository;
 import com.example.serving_web_content.services.TarefaService;
 import com.example.serving_web_content.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +53,7 @@ public class TarefaController {
     }
 
     @GetMapping("/{idUsuario}/{dataInicio}")
-    public String verDia(@PathVariable int idUsuario, @PathVariable String dataInicio, Model model, @ModelAttribute TarefaFiltro tarefa) {
+    public String verDia(@PathVariable Integer idUsuario, @PathVariable String dataInicio, Model model, @ModelAttribute TarefaFiltro tarefa) {
         tarefa.setIdUsuario(idUsuario);
         tarefa.setDataInicio(dataInicio);
         List<Tarefa> tarefasFiltradas = tarefaService.listarTarefasFiltradas(tarefa);
@@ -111,19 +113,26 @@ public class TarefaController {
             model.addAttribute("usuarios", usuarioService.listar());
             return "tarefas/form";
         }
-        tarefaService.adicionar(tarefa);
-        ra.addFlashAttribute("msg", "Tarefa cadastrado com sucesso!");
+        try {
+            tarefaService.adicionar(tarefa);
+        } catch(IllegalArgumentException inputInvalid) {
+            ra.addFlashAttribute("msg", "Não foi possível cadastrar a tarefa.\nErro: " + inputInvalid.getMessage());
+            ra.addFlashAttribute("error", 1);
+            return "redirect:/tarefas";
+        }
+        ;
+        ra.addFlashAttribute("msg", "Tarefa cadastrada com sucesso!");
+        ra.addFlashAttribute("error", 0);
         return "redirect:/tarefas";
     }
 
     @PostMapping("/atualizar_pos")
     public ResponseEntity<?> updatePosition(@RequestBody TarefaPos dto) {
-        Optional<Tarefa> tarefaMovida = tarefaRepository.findById(dto.getId());
-        if (tarefaMovida.isPresent()) {
-            Tarefa tarefa = tarefaMovida.get();
-            tarefa.setPosx(dto.getX());
-            tarefa.setPosy(dto.getY());
-            tarefaService.atualizar(dto.getId(), tarefa);
+        Tarefa tarefaMovida = tarefaService.listarPorId(dto.getId());
+        if (tarefaMovida.getId() != null) {
+            tarefaMovida.setPosx(dto.getX());
+            tarefaMovida.setPosy(dto.getY());
+            tarefaService.atualizar(tarefaMovida.getId(), tarefaMovida);
             return ResponseEntity.ok(Map.of("status", "success"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "task not found"));
@@ -132,12 +141,11 @@ public class TarefaController {
 
     @PostMapping("/atualizar_tamanho")
     public ResponseEntity<?> updateSize(@RequestBody TarefaTam dto) {
-        Optional<Tarefa> optionalTask = tarefaRepository.findById(dto.getIdTarefa());
-        if (optionalTask.isPresent()) {
-            Tarefa task = optionalTask.get();
-            task.setComprimento(dto.getComprimento());
-            task.setAltura(dto.getAltura());
-            tarefaRepository.save(task);
+        Tarefa tarefaRedim = tarefaService.listarPorId(dto.getIdTarefa());
+        if (tarefaRedim.getId() != null) {
+            tarefaRedim.setComprimento(dto.getComprimento());
+            tarefaRedim.setAltura(dto.getAltura());
+            tarefaService.atualizar(dto.getIdTarefa(), tarefaRedim);
             return ResponseEntity.ok(Map.of("status", "success"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("status", "task not found"));
@@ -145,13 +153,13 @@ public class TarefaController {
     }
 
     @GetMapping("/editar/{id}")
-    public String abrirEdicao(@PathVariable Long id, Model model) {
-        model.addAttribute("tarefa", tarefaService.listarPorId(Math.toIntExact(id)));
+    public String abrirEdicao(@PathVariable Integer id, Model model) {
+        model.addAttribute("tarefa", tarefaService.listarPorId(id));
         model.addAttribute("usuarios", usuarioService.listar());
         return "tarefas/form";
     }
     @PutMapping("/{id}")
-    public String atualizar(@PathVariable Long id,
+    public String atualizar(@PathVariable Integer id,
                             @Valid @ModelAttribute Tarefa tarefa,
                             BindingResult erros,
                             RedirectAttributes ra,
@@ -160,15 +168,34 @@ public class TarefaController {
             model.addAttribute("usuarios", usuarioService.listar());
             return "tarefas/form";
         }
-        tarefaService.atualizar(id, tarefa);
-        ra.addFlashAttribute("msg", "Tarefa atualizada!");
+        try {
+            tarefaService.atualizar(id, tarefa);
+        } catch(IllegalArgumentException inputInvalid) {
+            ra.addFlashAttribute("msg", "Não foi possível atualizar a tarefa.\nErro: " + inputInvalid.getMessage());
+            ra.addFlashAttribute("error", 1);
+            return "redirect:/tarefas";
+        }
+        ;
+        ra.addFlashAttribute("msg", "Tarefa atualizada com sucesso!");
+        ra.addFlashAttribute("error", 0);
         return "redirect:/tarefas";
     }
 
     @DeleteMapping("/{idTarefa}")
-    public String excluir(@PathVariable("idTarefa") Long idTarefa, RedirectAttributes ra) {
-        tarefaService.remover(idTarefa.intValue());
-        ra.addFlashAttribute("msg", "Tarefa excluída!");
+    public String excluir(@PathVariable("idTarefa") Integer idTarefa, RedirectAttributes ra) {
+        List<Tarefa> tarefasAvailable = tarefaService.listar();
+        List<Integer> tarefasIds = new ArrayList<>();
+        for (Tarefa t : tarefasAvailable) {
+            tarefasIds.add(t.getId());
+        }
+        if (tarefasIds.contains(idTarefa)) {
+            tarefaService.remover(idTarefa);
+            ra.addFlashAttribute("msg", "Tarefa excluída com sucesso!");
+            ra.addFlashAttribute("error", 0);
+        } else {
+            ra.addFlashAttribute("msg", "Não foi possível excluir a tarefa: Tarefa inexistente.");
+            ra.addFlashAttribute("error", 1);
+        }
         return "redirect:/tarefas";
     }
 }

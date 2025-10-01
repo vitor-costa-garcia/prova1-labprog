@@ -1,11 +1,13 @@
 package com.example.serving_web_content.services;
 
+import com.example.serving_web_content.models.Tarefa;
 import com.example.serving_web_content.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.example.serving_web_content.models.Usuario;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +25,22 @@ public class UsuarioService {
         String nome = usuario.getNome();
         String email = usuario.getEmail();
 
+        List<Usuario> usersAvailable = UsuarioRepository.findAll();
+
         //Validações
         if (nome == null || nome.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Nome inválido.");
         }
         if (email == null || !email.contains("@")) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Email inválido.");
+        }
+        for (Usuario u :  usersAvailable) {
+            if (u.getNome().equals(nome)) {
+                throw new IllegalArgumentException("O nome fornecido já foi usado.");
+            }
+            if(u.getEmail().equals(email)) {
+                throw new IllegalArgumentException("O email fornecido já foi usado.");
+            }
         }
 
         Usuario c = new Usuario(idUsuario,
@@ -50,12 +62,22 @@ public class UsuarioService {
         String nome = usuario.getNome();
         String email = usuario.getEmail();
 
+        List<Usuario> usersAvailable = UsuarioRepository.findAll();
+
         /* Validações */
         if (nome == null || nome.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Nome inválido.");
         }
         if (email == null || !email.contains("@")) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("Email inválido.");
+        }
+        for (Usuario u :  usersAvailable) {
+            if (u.getNome().equals(nome) && !u.getId().equals(idUsuario)) {
+                throw new IllegalArgumentException("O nome fornecido já foi usado.");
+            }
+            if(u.getEmail().equals(email) && !u.getId().equals(idUsuario)) {
+                throw new IllegalArgumentException("O email fornecido já foi usado.");
+            }
         }
 
         // Busca o tarefa existente

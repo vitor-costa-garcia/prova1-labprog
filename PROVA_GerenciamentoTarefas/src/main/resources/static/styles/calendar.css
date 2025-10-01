@@ -48,7 +48,14 @@
 }
 
 .calendar-date-changer-button{
-    border: none;
+    background-color: #212529;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+    width: 200px;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 .calendar-week-section{
@@ -66,7 +73,8 @@
 
 .home-date-changer{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    height: 58px;
     width: 80%;
     margin-left: 10%;
     padding-top: 1%;

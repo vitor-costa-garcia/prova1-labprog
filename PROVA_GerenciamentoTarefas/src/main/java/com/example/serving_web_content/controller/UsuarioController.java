@@ -1,5 +1,6 @@
 package com.example.serving_web_content.controller;
 
+import com.example.serving_web_content.models.Tarefa;
 import com.example.serving_web_content.models.Usuario;
 import com.example.serving_web_content.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -51,8 +55,16 @@ public class UsuarioController {
         if (erros.hasErrors()) {
             return "usuarios/form";
         }
-        usuarioService.adicionar(usuario);
-        ra.addFlashAttribute("msg", "Usuario cadastrado com sucesso!");
+        try {
+            usuarioService.adicionar(usuario);
+        } catch(IllegalArgumentException inputInvalid) {
+            ra.addFlashAttribute("msg", "Não foi possível cadastrar o usuário.\nErro: " + inputInvalid.getMessage());
+            ra.addFlashAttribute("error", 1);
+            return "redirect:/usuarios";
+        }
+        ;
+        ra.addFlashAttribute("msg", "Usuário cadastrado com sucesso!");
+        ra.addFlashAttribute("error", 0);
         return "redirect:/usuarios";
     }
 
@@ -61,6 +73,7 @@ public class UsuarioController {
         model.addAttribute("usuario", usuarioService.listarPorId(Math.toIntExact(id)));
         return "usuarios/form";
     }
+
     @PutMapping("/{id}")
     public String atualizar(@PathVariable Long id,
                             @Valid @ModelAttribute Usuario usuario,
@@ -69,15 +82,34 @@ public class UsuarioController {
         if (erros.hasErrors()) {
             return "usuarios/form";
         }
-        usuarioService.atualizar(id, usuario);
-        ra.addFlashAttribute("msg", "Usuario atualizado com sucesso!");
+        try {
+            usuarioService.atualizar(id, usuario);
+        } catch(IllegalArgumentException inputInvalid) {
+            ra.addFlashAttribute("msg", "Não foi possível atualizar o usuário.\nErro: " + inputInvalid.getMessage());
+            ra.addFlashAttribute("error", 1);
+            return "redirect:/usuarios";
+        }
+        ;
+        ra.addFlashAttribute("msg", "Usuário atualizado com sucesso!");
+        ra.addFlashAttribute("error", 0);
         return "redirect:/usuarios";
     }
 
     @DeleteMapping("/{idUsuario}")
-    public String excluir(@PathVariable("idUsuario") Long idUsuario, RedirectAttributes ra) {
-        usuarioService.remover(idUsuario.intValue());
-        ra.addFlashAttribute("msg", "Usuário excluído com sucesso!");
+    public String excluir(@PathVariable("idUsuario") Integer idUsuario, RedirectAttributes ra) {
+        List<Usuario> usuariosAvailable = usuarioService.listar();
+        List<Integer> usuariosIds = new ArrayList<>();
+        for (Usuario u : usuariosAvailable) {
+            usuariosIds.add(u.getId());
+        }
+        if (usuariosIds.contains(idUsuario)) {
+            usuarioService.remover(idUsuario);
+            ra.addFlashAttribute("msg", "Usuário excluído com sucesso!");
+            ra.addFlashAttribute("error", 0);
+        } else {
+            ra.addFlashAttribute("msg", "Não foi possível excluir o usuário: Usuário inexistente.");
+            ra.addFlashAttribute("error", 1);
+        }
         return "redirect:/usuarios";
     }
 }

@@ -25,7 +25,10 @@
 
 <h1 class="lista-tarefa-title">Listagem de tarefas</h1>
 <!−− Mensagem de sucesso −−>
-<p th:if="${msg}" th:text="${msg}" class="lista-success-warning"></p>
+<p th:if="${msg != null and error==0}" th:text="${msg}" class="lista-success-warning"></p>
+
+<!-- Mensagem de erro -->
+<p th:if="${msg != null and error==1}" th:text="${msg}" class="lista-failure-warning"></p>
 
 <div class="lista-tarefa-button-container">
     <p><a class="btn btn-dark" th:href="@{/tarefas/novo}">Nova Tarefa</a></p>

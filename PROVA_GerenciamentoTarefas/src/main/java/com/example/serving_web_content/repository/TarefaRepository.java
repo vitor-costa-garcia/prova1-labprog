@@ -18,7 +18,7 @@ public interface TarefaRepository extends JpaRepository<Tarefa,Long>{
     @Query("SELECT t FROM Tarefa t WHERE t.idUsuario = ?1 AND t.dataInicio = ?2")
     List<Tarefa> findByIdUsuarioAndDataInicio(Integer idUsuario, String dataInicio);
 
-    void deleteByIdTarefa(Long idTarefa);
+    void deleteByIdTarefa(Integer idTarefa);
 
     @Query("""
     SELECT t FROM Tarefa t
