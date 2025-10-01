@@ -93,7 +93,7 @@ public class TarefaController {
     @GetMapping("/novo/{data}")
     public String abrirCadastro(@PathVariable String data, Model model) {
         Tarefa formTarefa = new Tarefa();
-        formTarefa.setId(-1);
+        formTarefa.setId(null);
         System.out.print(formTarefa.getId());
         formTarefa.setDataInicio(data);
         model.addAttribute("tarefa", formTarefa);

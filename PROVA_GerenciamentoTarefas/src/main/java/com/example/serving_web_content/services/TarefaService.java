@@ -22,8 +22,8 @@ public class TarefaService {
     }
 
     public ResponseEntity<Tarefa> adicionar(Tarefa tarefa) {
-        int idTarefa = tarefa.getId();
-        int idUsuario = tarefa.getIdUsuario();
+        Integer idTarefa = tarefa.getId();
+        Integer idUsuario = tarefa.getIdUsuario();
         String titulo = tarefa.getTitulo();
         String tipo = tarefa.getTipo();
         String descricao = tarefa.getDescricao();
@@ -64,14 +64,14 @@ public class TarefaService {
     }
 
     @Transactional
-    public ResponseEntity<String> remover(int idTarefa) {
+    public ResponseEntity<String> remover(Integer idTarefa) {
         TarefaRepository.deleteByIdTarefa((long) idTarefa);
         return ResponseEntity.noContent().build();
     }
 
     public ResponseEntity<Tarefa> atualizar(Long index, @Valid Tarefa tarefa) {
-        int idTarefa = tarefa.getId();
-        int idUsuario = tarefa.getIdUsuario();
+        Integer idTarefa = tarefa.getId();
+        Integer idUsuario = tarefa.getIdUsuario();
         String titulo = tarefa.getTitulo();
         String tipo = tarefa.getTipo();
         String descricao = tarefa.getDescricao();
@@ -117,15 +117,15 @@ public class TarefaService {
         return TarefaRepository.findAll();
     }
 
-    public Tarefa listarPorId(int id) {
+    public Tarefa listarPorId(Integer id) {
         return TarefaRepository.findById((long) id).orElse(null);
     }
 
-    public List<Tarefa> listarTarefasUsuarioData(int idUsuario, String dataInicio) {
+    public List<Tarefa> listarTarefasUsuarioData(Integer idUsuario, String dataInicio) {
         return TarefaRepository.findByIdUsuarioAndDataInicio(idUsuario, dataInicio);
     }
 
-    public List<Tarefa> listarTarefasUsuario(int idUsuario) {
+    public List<Tarefa> listarTarefasUsuario(Integer idUsuario) {
         return TarefaRepository.findByIdUsuario(idUsuario);
     }
 

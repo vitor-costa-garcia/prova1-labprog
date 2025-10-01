@@ -65,6 +65,16 @@ body{
     border-radius: 5px;
 }
 
+.lista-failure-warning{
+    margin-left: 8%;
+    border: #8b2222 solid 1px;
+    background-color: #ffcdcd;
+    color: #531919;
+    width: 84%;
+    padding: 20px;
+    border-radius: 5px;
+}
+
 .lista-tarefa-button-container{
     margin-left: 8%;
     display: flex;

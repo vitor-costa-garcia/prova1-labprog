@@ -20,7 +20,7 @@ public class UsuarioService {
     }
 
     public ResponseEntity<Usuario> adicionar(Usuario usuario) {
-        int idUsuario = usuario.getId();
+        Integer idUsuario = usuario.getId();
         String nome = usuario.getNome();
         String email = usuario.getEmail();
         /* Validações
@@ -42,13 +42,13 @@ public class UsuarioService {
     }
 
     @Transactional
-    public ResponseEntity<String> remover(int idUsuario) {
+    public ResponseEntity<String> remover(Integer idUsuario) {
         UsuarioRepository.deleteById((long) idUsuario);
         return ResponseEntity.noContent().build();
     }
 
     public ResponseEntity<Usuario> atualizar(Long index, @Valid Usuario usuario) {
-        int idUsuario = usuario.getId();
+        Integer idUsuario = usuario.getId();
         String nome = usuario.getNome();
         String email = usuario.getEmail();
 
@@ -77,7 +77,7 @@ public class UsuarioService {
         return UsuarioRepository.findAll();
     }
 
-    public Usuario listarPorId(int id) {
+    public Usuario listarPorId(Integer id) {
         return UsuarioRepository.findById((long) id).orElse(null);
     }
 

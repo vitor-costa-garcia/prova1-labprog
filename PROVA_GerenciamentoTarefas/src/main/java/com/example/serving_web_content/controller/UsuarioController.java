@@ -41,7 +41,7 @@ public class UsuarioController {
     @GetMapping("/novo")
     public String abrirCadastro(Model model) {
         Usuario formUsuario = new Usuario();
-        formUsuario.setId(-1);
+        formUsuario.setId(null);
         System.out.print(formUsuario.getId());
         model.addAttribute("usuario", formUsuario);
         return "usuarios/form";

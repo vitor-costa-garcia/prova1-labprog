@@ -19,3 +19,14 @@
     padding: 20px;
     padding-bottom: 0px;
 }
+
+.form-failure-warning{
+    border: #8b2222 solid 1px;
+    background-color: #ffcdcd;
+    color: #531919;
+    width: 100%;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 2%;
+    margin-top: 2%;
+}

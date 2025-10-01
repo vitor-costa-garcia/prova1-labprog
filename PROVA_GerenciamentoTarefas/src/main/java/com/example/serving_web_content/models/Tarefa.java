@@ -12,11 +12,11 @@ public class Tarefa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idTarefa", nullable = false, unique = true)
-    private int idTarefa;
+    private Integer idTarefa;
 
     //chave estrangeira
     @Column(name="idUsuario", nullable = false)
-    private int idUsuario;
+    private Integer idUsuario;
 
     @NotBlank(message = "O título não pode ser nulo.")
     @Size(max = 100, message = "O título deve ter no máximo 100 caracteres")
@@ -58,7 +58,7 @@ public class Tarefa {
     private int statusTarefa;
 
 
-    public Tarefa(int idTarefa,
+    public Tarefa(Integer idTarefa,
                   int idUsuario,
                   String titulo,
                   String tipo,
@@ -88,24 +88,24 @@ public class Tarefa {
 
     }
 
-    public int     getId(){
+    public Integer getId(){
         return idTarefa;
     }
-    public int    getIdUsuario(){ return idUsuario; }
-    public String getTitulo(){ return titulo; }
-    public String getTipo(){ return tipo; }
-    public String getDescricao(){ return descricao; }
-    public String getDataInicio(){ return dataInicio; }
-    public int    getPosx(){ return posx; }
-    public int    getPosy(){ return posy; }
-    public int    getComprimento(){ return comprimento; }
-    public int    getAltura(){ return altura; }
-    public int    getCor(){ return cor; }
-    public int    getStatusTarefa(){ return statusTarefa; }
+    public Integer getIdUsuario(){ return idUsuario; }
+    public String  getTitulo(){ return titulo; }
+    public String  getTipo(){ return tipo; }
+    public String  getDescricao(){ return descricao; }
+    public String  getDataInicio(){ return dataInicio; }
+    public int     getPosx(){ return posx; }
+    public int     getPosy(){ return posy; }
+    public int     getComprimento(){ return comprimento; }
+    public int     getAltura(){ return altura; }
+    public int     getCor(){ return cor; }
+    public int     getStatusTarefa(){ return statusTarefa; }
 
 
-    public void setId(int idTarefa){ this.idTarefa = idTarefa; }
-    public void setIdUsuario(int idUsuario){ this.idUsuario = idUsuario; }
+    public void setId(Integer idTarefa){ this.idTarefa = idTarefa; }
+    public void setIdUsuario(Integer idUsuario){ this.idUsuario = idUsuario; }
     public void setTitulo(String titulo){ this.titulo = titulo; }
     public void setTipo(String tipo){ this.tipo = tipo; }
     public void setDescricao(String descricao){ this.descricao = descricao; }

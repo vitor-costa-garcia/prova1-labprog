@@ -22,18 +22,27 @@
     </div>
 </div>
 
-<h1 th:text="${tarefa.getId()} != -1 ? 'Editor de tarefas: Tarefa ID ' + ${tarefa.getId()} : 'Criador de tarefas'" class="form-tarefa-title"></h1>
+<h1 th:text="${tarefa.getId()} != null ? 'Editor de tarefas: Tarefa ID ' + ${tarefa.getId()} : 'Criador de tarefas'" class="form-tarefa-title"></h1>
 
 <!-- Formulário de cadastro -->
 <div class="container-form-tarefa">
-    <form th:if="${tarefa.getId()} == -1" th:action="@{/tarefas}" method="post" th:object="${tarefa}">
+    <form th:if="${tarefa.getId()} == null" th:action="@{/tarefas}" method="post" th:object="${tarefa}">
+        <!-- Erros de validação -->
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
+
         <label for="idUsuario">Usuário:</label>
-        <select th:field="*{idUsuario}" id="idUsuario" class="form-select" required>
-            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getId()}"></option>
+        <select th:field="*{idUsuario}" id="idUsuario" class="form-select">
+            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getNome()}"></option>
         </select><br>
 
         <label for="titulo">Titulo:</label>
-        <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação" required><br>
+        <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação"><br>
 
         <label for="tipo">Tipo:</label>
         <input th:field="*{tipo}" id="tipo" class="form-control" placeholder="Ex: Faculdade, Casa, Autocuidado" type="text"><br>
@@ -48,7 +57,7 @@
             </div>
             <div>
                 <label for="cor">Cor PostIt:</label>
-                <select th:field="*{cor}" class="form-select" id="cor" required>
+                <select th:field="*{cor}" class="form-select" id="cor">
                     <option value="0">Amarelo</option>
                     <option value="1">Laranja</option>
                     <option value="2">Vermelho</option>
@@ -60,21 +69,13 @@
 
             <div>
                 <label for="statusTarefa">Status:</label>
-                <select th:field="*{statusTarefa}" class="form-select" id="statusTarefa" required>
+                <select th:field="*{statusTarefa}" class="form-select" id="statusTarefa">
                     <option value="0">Em andamento</option>
                     <option value="1">Concluído</option>
                 </select><br>
             </div>
         </div>
 
-        <!-- Erros de validação -->
-        <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
-        <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
-        <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
-        <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
-        <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
-        <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
-        <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
 
         <div class="container-form-tarefa-buttons">
             <button type="submit" class="btn btn-success"  style="margin-right: 200px">Cadastrar</button>
@@ -85,16 +86,25 @@
 
 <!-- Formulário de edição -->
 <div class="container-form-tarefa">
-    <form th:if="${tarefa.getId()} != -1" th:action="@{/tarefas/{id}(id=${tarefa.getId()})}" method="post" th:object="${tarefa}">
+    <form th:if="${tarefa.getId()} != null" th:action="@{/tarefas/{id}(id=${tarefa.getId()})}" method="post" th:object="${tarefa}">
+        <!-- Erros de validação -->
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
+
         <input type="hidden" name="_method" value="put"/>
 
         <label for="idUsuario">Usuário:</label>
-        <select th:field="*{idUsuario}" id="idUsuario" class="form-select" required>
-            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getId()}"></option>
+        <select th:field="*{idUsuario}" id="idUsuario" class="form-select">
+            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getNome()}"></option>
         </select><br>
 
         <label for="titulo">Titulo:</label>
-        <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação" required><br>
+        <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação"><br>
 
         <label for="tipo">Tipo:</label>
         <input th:field="*{tipo}" id="tipo" class="form-control" placeholder="Ex: Faculdade, Casa, Autocuidado" type="text"><br>
@@ -109,7 +119,7 @@
             </div>
             <div>
                 <label for="cor">Cor PostIt:</label>
-                <select th:field="*{cor}" class="form-select" id="cor" required>
+                <select th:field="*{cor}" class="form-select" id="cor">
                     <option value="0">Amarelo</option>
                     <option value="1">Laranja</option>
                     <option value="2">Vermelho</option>
@@ -121,21 +131,13 @@
 
             <div>
                 <label for="statusTarefa">Status:</label>
-                <select th:field="*{statusTarefa}" class="form-select" id="statusTarefa" required>
+                <select th:field="*{statusTarefa}" class="form-select" id="statusTarefa">
                     <option value="0">Em andamento</option>
                     <option value="1">Concluído</option>
                 </select><br>
             </div>
         </div>
 
-        <!-- Erros de validação -->
-        <div th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
-        <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
-        <div th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
-        <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
-        <div th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
-        <div th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
-        <div th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
 
         <div class="container-form-tarefa-buttons">
             <button type="submit" class="btn btn-success" style="margin-right: 200px">Atualizar</button>

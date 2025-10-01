@@ -35,12 +35,6 @@
             </div>
             <div class="modal-body">
                 <form th:action="@{/tarefas/1/{data}(data=${dataInicio})}" method="get" th:object="${tarefaFilter}">
-                    <label for="idUsuario">Usuário:</label>
-                    <select th:field="*{idUsuario}" id="idUsuario" class="form-select">
-                        <option value="">Selecione</option>
-                        <option th:each="u: ${usuariosList}" th:value="${u.getId()}" th:text="${u.getNome()}"></option>
-                    </select><br>
-
                     <label for="tarefa">Tarefa:</label>
                     <select th:field="*{idTarefa}" id="tarefa" class="form-select">
                         <option value="">Selecione</option>

@@ -22,48 +22,48 @@
         </div>
     </div>
 </div>
-<h1 th:text="${usuario.getId()} != -1 ? 'Editor de usuários: Usuário ID ' + ${usuario.getId()} : 'Criador de Usuários'" class="form-tarefa-title"></h1>
+<h1 th:text="${usuario.getId()} != null ? 'Editor de usuários: Usuário ID ' + ${usuario.getId()} : 'Criador de Usuários'" class="form-tarefa-title"></h1>
 
 <!-- Formulário de cadastro -->
 <div class="container-form-tarefa">
-<form th:if="${usuario.getId()} == -1" th:action="@{/usuarios}" method="post" th:object="${usuario}">
-    <label for="nome">Nome:</label>
-    <input th:field="*{nome}" class="form-control" id="nome" type="text" required><br>
+    <form th:if="${usuario.getId()} == null" th:action="@{/usuarios}" method="post" th:object="${usuario}">
+        <!-- Erros de validação -->
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        <label for="nome">Nome:</label>
+        <input th:field="*{nome}" class="form-control" id="nome" type="text"><br>
 
-    <label for="email">Email:</label>
-    <input th:field="*{email}" class="form-control" id="email" type="text"><br>
+        <label for="email">Email:</label>
+        <input th:field="*{email}" class="form-control" id="email" type="text"><br>
 
-    <!-- Erros de validação -->
-    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 
-    <div class="container-form-tarefa-buttons">
-        <button type="submit" class="btn btn-success"  style="margin-right: 200px">Cadastrar</button>
-        <a th:href="@{/usuarios}" class="btn btn-danger">Cancelar</a>
-    </div>
-</form>
+        <div class="container-form-tarefa-buttons">
+            <button type="submit" class="btn btn-success"  style="margin-right: 200px">Cadastrar</button>
+            <a th:href="@{/usuarios}" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
 </div>
 
 <!-- Formulário de edição -->
 <div class="container-form-tarefa">
-<form th:if="${usuario.getId()} != -1" th:action="@{/usuarios/{id}(id=${usuario.getId()})}" method="post" th:object="${usuario}">
-    <input type="hidden" name="_method" value="put"/>
+    <form th:if="${usuario.getId()} != null" th:action="@{/usuarios/{id}(id=${usuario.getId()})}" method="post" th:object="${usuario}">
+        <!-- Erros de validação -->
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        <div class="form-failure-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        <input type="hidden" name="_method" value="put"/>
 
-    <label for="nome">Nome:</label>
-    <input th:field="*{nome}" class="form-control" id="nome" type="text" required><br>
+        <label for="nome">Nome:</label>
+        <input th:field="*{nome}" class="form-control" id="nome" type="text"><br>
 
-    <label for="email">Email:</label>
-    <input th:field="*{email}" class="form-control" id="email" type="text"><br>
+        <label for="email">Email:</label>
+        <input th:field="*{email}" class="form-control" id="email" type="text"><br>
 
-    <!-- Erros de validação -->
-    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 
-    <div class="container-form-tarefa-buttons">
-        <button type="submit" class="btn btn-primary" style="margin-right: 200px">Atualizar</button>
-        <a th:href="@{/usuarios}" class="btn btn-danger">Cancelar</a>
-    </div>
-</form>
+        <div class="container-form-tarefa-buttons">
+            <button type="submit" class="btn btn-primary" style="margin-right: 200px">Atualizar</button>
+            <a th:href="@{/usuarios}" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

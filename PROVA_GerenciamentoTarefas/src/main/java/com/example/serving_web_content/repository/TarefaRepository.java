@@ -14,11 +14,11 @@ import java.util.List;
 public interface TarefaRepository extends JpaRepository<Tarefa,Long>{
     List<Tarefa> findByTitulo(String titulo);
     List<Tarefa> findByTipo(String tipo);
-    List<Tarefa> findByIdUsuario(int idUsuario);
+    List<Tarefa> findByIdUsuario(Integer idUsuario);
     List<Tarefa> findByDataInicio(String dataInicio);
 
     @Query("SELECT t FROM Tarefa t WHERE t.idUsuario = ?1 AND t.dataInicio = ?2")
-    List<Tarefa> findByIdUsuarioAndDataInicio(int idUsuario, String dataInicio);
+    List<Tarefa> findByIdUsuarioAndDataInicio(Integer idUsuario, String dataInicio);
 
     void deleteByIdTarefa(Long idTarefa);
 

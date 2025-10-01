@@ -12,7 +12,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idUsuario", nullable = false, unique = true)
-    private int idUsuario;;
+    private Integer idUsuario;;
 
     @NotBlank(message = "O nome não pode ser nulo.")
     @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
@@ -25,7 +25,7 @@ public class Usuario {
     @Column(name="email", nullable = false, unique = true, length = 200)
     private String email;
 
-    public Usuario(int idUsuario,
+    public Usuario(Integer idUsuario,
                    String nome,
                    String email
                   ) {
@@ -38,11 +38,11 @@ public class Usuario {
 
     }
 
-    public int    getId(){ return idUsuario; }
+    public Integer getId(){ return idUsuario; }
     public String getNome(){ return nome; }
     public String getEmail(){ return email; }
 
-    public void setId(int idUsuario){ this.idUsuario = idUsuario; }
+    public void setId(Integer idUsuario){ this.idUsuario = idUsuario; }
     public void setNome(String nome){ this.nome = nome; }
     public void setEmail(String email){ this.email = email; }
 // getters e setters

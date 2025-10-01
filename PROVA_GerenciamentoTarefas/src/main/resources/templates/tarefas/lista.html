@@ -125,18 +125,43 @@
                     <form th:action="@{/tarefas/editar/{id}(id=${c.getId()})}" method="get">
                         <button type="submit" class="btn btn-secondary">Editar</button>
                     </form>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#exampleModalTarefa'+${c.getId()}">
+                        Excluir
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <!-- Modal -->
+    <div th:each="c: ${tarefas}" class="modal fade" th:id="'exampleModalTarefa'+${c.getId()}" tabindex="-1" th:aria-labelledby="'exampleModalTarefaL'+${c.getId()}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" th:id="'exampleModalTarefaL'+${c.getId()}" th:text="'Excluir tarefa ID ' + ${c.getId()}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Deseja mesmo excluir?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                     <form th:action="@{/tarefas/{idTarefa}(idTarefa=${c.getId()})}" method="post" class="btn btn-danger btn-sm">
                         <input type="hidden" name="_method" value="delete"/>
                         <button type="submit" style="border: transparent; background-color: transparent; color: white">Excluir</button>
                     </form>
                 </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
 <script src="/scripts/dragPostit.js"></script>
 <script src="/scripts/resizePostit.js"></script>
