@@ -25,8 +25,28 @@
 
     <div class="home-date-changer">
         <h3><a th:href="@{/home/{ym}(ym=${yearMonthLast})}" class="btn btn-dark"><</a></h3>
-        <h3 th:text="${yearMonth}"></h3>
+        <button type="button" class="calendar-date-changer-button" data-bs-toggle="modal" data-bs-target="#exampleModal"><h3 th:text="${yearMonth}"></h3></button>
         <h3><a th:href="@{/home/{ym}(ym=${yearMonthNext})}" class="btn btn-dark">></a></h3>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Filtro calendário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="yearMonthFilterInput">Mês</label>
+                    <input type="month" th:value="${yearMonth}" id="yearMonthFilterInput" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-dark" onclick="calendarMonthRedirect()">Buscar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="calendar">
@@ -59,4 +79,5 @@
 <script src="/scripts/dragPostit.js"></script>
 <script src="/scripts/calendarBuild.js"></script>
 <script src="/scripts/calendarRedirect.js"></script>
+<script src="/scripts/calendarMonthRedirect.js"></script>
 </html>

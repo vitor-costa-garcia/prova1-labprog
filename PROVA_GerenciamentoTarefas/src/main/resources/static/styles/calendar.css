@@ -47,6 +47,10 @@
     transition: 0.2s ease-in-out;
 }
 
+.calendar-date-changer-button{
+    border: none;
+}
+
 .calendar-week-section{
     display: flex;
     justify-content: space-evenly;
