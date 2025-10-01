@@ -23,15 +23,14 @@ public class UsuarioService {
         Integer idUsuario = usuario.getId();
         String nome = usuario.getNome();
         String email = usuario.getEmail();
-        /* Validações
-        if (nome == null || nome.isEmpty()) { // Validação de nome
-            return ResponseEntity.badRequest().build();
-        } else if (telefone == null || telefone.isEmpty()) { // Validação de telefone
-            return ResponseEntity.badRequest().build();
-        } else if (email == null || email.isEmpty() || !email.contains("@")) { // Validação de email
+
+        //Validações
+        if (nome == null || nome.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-         */
+        if (email == null || !email.contains("@")) {
+            return ResponseEntity.badRequest().build();
+        }
 
         Usuario c = new Usuario(idUsuario,
                 nome,
@@ -52,15 +51,13 @@ public class UsuarioService {
         String nome = usuario.getNome();
         String email = usuario.getEmail();
 
-        /* Validações
+        /* Validações */
         if (nome == null || nome.isEmpty()) {
             return ResponseEntity.badRequest().build();
-        } else if (telefone == null || telefone.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        } else if (email == null || email.isEmpty() || !email.contains("@")) {
+        }
+        if (email == null || !email.contains("@")) {
             return ResponseEntity.badRequest().build();
         }
-         */
 
         // Busca o tarefa existente
         return UsuarioRepository.findById((long) index).map(Usuario -> {

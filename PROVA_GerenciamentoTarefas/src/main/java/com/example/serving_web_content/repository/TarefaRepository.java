@@ -27,7 +27,7 @@ public interface TarefaRepository extends JpaRepository<Tarefa,Long>{
     WHERE (:idTarefa IS NULL OR t.idTarefa = :idTarefa)
       AND (:idUsuario IS NULL OR t.idUsuario = :idUsuario)
       AND (:titulo IS NULL OR t.titulo LIKE %:titulo%)
-      AND (:dataInicio IS NULL OR t.dataInicio LIKE :dataInicio)
+      AND (:dataInicio IS NULL OR t.dataInicio LIKE %:dataInicio%)
       AND (:descricao IS NULL OR t.descricao LIKE %:descricao%)
       AND (:titulo IS NULL OR t.titulo LIKE %:titulo%)
       AND (:cor IS NULL OR t.cor = :cor)

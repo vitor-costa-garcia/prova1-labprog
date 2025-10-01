@@ -36,15 +36,33 @@ public class TarefaService {
         int statusTarefa = tarefa.getStatusTarefa();
 
 
-        /* Validações
-        if (nome == null || nome.isEmpty()) { // Validação de nome
-            return ResponseEntity.badRequest().build();
-        } else if (telefone == null || telefone.isEmpty()) { // Validação de telefone
-            return ResponseEntity.badRequest().build();
-        } else if (email == null || email.isEmpty() || !email.contains("@")) { // Validação de email
+        //Validações
+        if (idUsuario == null) { // Validação de usuário
             return ResponseEntity.badRequest().build();
         }
-         */
+        if (titulo == null || titulo.isEmpty()) { // Validação de titulo
+            return ResponseEntity.badRequest().build();
+        }
+        if (tipo == null || tipo.isEmpty()) { // Validação de tipo
+            return ResponseEntity.badRequest().build();
+        }
+        if (descricao == null || descricao.isEmpty()) { // Validação de descrição
+            return ResponseEntity.badRequest().build();
+        }
+        if (dataInicio == null || dataInicio.isEmpty()) { // Validação de data
+            return ResponseEntity.badRequest().build();
+        }
+        for(int i = 0; i < dataInicio.length(); i++) { //Validação de data por caracter
+            if(Character.isLetter(dataInicio.charAt(i))){
+                return ResponseEntity.badRequest().build();
+            }
+        }
+        if(cor<0 || cor>5){ //Validacao de cor da tarefa
+            return ResponseEntity.badRequest().build();
+        }
+        if(statusTarefa != 0 && statusTarefa != 1){ //Validação de status da tarefa
+            return ResponseEntity.badRequest().build();
+        }
 
         Tarefa c = new Tarefa(idTarefa,
                               idUsuario,
@@ -83,15 +101,36 @@ public class TarefaService {
         int cor = tarefa.getCor();
         int statusTarefa = tarefa.getStatusTarefa();
 
-        /* Validações
-        if (nome == null || nome.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        } else if (telefone == null || telefone.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        } else if (email == null || email.isEmpty() || !email.contains("@")) {
+        //Validações
+        if (idTarefa == null) { //validação de idtarefa
             return ResponseEntity.badRequest().build();
         }
-         */
+        if (idUsuario == null) { // Validação de usuário
+            return ResponseEntity.badRequest().build();
+        }
+        if (titulo == null || titulo.isEmpty()) { // Validação de titulo
+            return ResponseEntity.badRequest().build();
+        }
+        if (tipo == null || tipo.isEmpty()) { // Validação de tipo
+            return ResponseEntity.badRequest().build();
+        }
+        if (descricao == null || descricao.isEmpty()) { // Validação de descrição
+            return ResponseEntity.badRequest().build();
+        }
+        if (dataInicio == null || dataInicio.isEmpty()) { // Validação de data
+            return ResponseEntity.badRequest().build();
+        }
+        for(int i = 0; i < dataInicio.length(); i++) { //Validação de data por caracter
+            if(Character.isLetter(dataInicio.charAt(i))){
+                return ResponseEntity.badRequest().build();
+            }
+        }
+        if(cor<0 || cor>5){ //Validacao de cor da tarefa
+            return ResponseEntity.badRequest().build();
+        }
+        if(statusTarefa != 0 && statusTarefa != 1){ //Validação de status da tarefa
+            return ResponseEntity.badRequest().build();
+        }
 
         // Busca o tarefa existente
         return TarefaRepository.findById((long) index).map(Tarefa -> {
