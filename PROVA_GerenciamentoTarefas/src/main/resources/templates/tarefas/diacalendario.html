@@ -12,17 +12,7 @@
 </div>
 <div class="date-text-tarefas">
     <h3 th:text="'Data: ' + ${dataInicio}"></h3>
-    <span style="display: flex; justify-content: space-around; width: 700px;">
-        <p><a th:href="@{/tarefas/novo/{data}(data=${dataInicio})}" class="btn btn-dark">Nova Tarefa</a></p>
-        <p><a th:href="@{/tarefas}" class="btn btn-dark">Gerenciar Tarefas</a></p>
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal1">
-        Filtrar tarefas
-        </button>
-        <p><a onclick="startResize()" class="btn btn-secondary">Enfileirar tarefas</a></p>
-    </span>
 </div>
-<!−− Mensagem de sucesso −−>
-<p th:if="${msg}" th:text="${msg}"></p>
 
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -79,12 +69,22 @@
 </div>
 
     <div th:each="c : ${tarefas}" class="task-postit-1" th:id="${c.getId()}" th:style="'left:' + ${c.posx} + 'px; top:' + ${c.posy} + 'px; width:' + ${c.comprimento} + 'px; height:' + ${c.altura} + 'px; position:absolute;'">
-        <div class="task-postit-top-1" id="task-postit-drag" th:styleappend="'background-color:'+${cores[c.cor][1]}"></div>
+        <div th:text="'Nº'+${c.getId()}" class="task-postit-top-1" id="task-postit-drag" th:styleappend="'background-color:'+${cores[c.cor][1]}"></div>
         <div class="task-postit-body-1" th:styleappend="'background-color:'+${cores[c.cor][0]}">
             <div class="task-postit-textarea" th:text="${c.descricao}" ></div>
         </div>
         <div class="resize-handle"></div>
     </div>
+
+<span class="date-text-tarefas-button-span">
+    <p><a th:href="@{/tarefas/novo/{data}(data=${dataInicio})}" class="btn btn-dark">Nova Tarefa</a></p>
+    <p><a th:href="@{/tarefas}" class="btn btn-dark">Gerenciar Tarefas</a></p>
+    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal1">
+    Filtrar tarefas
+    </button>
+    <p><a onclick="startResize()" class="btn btn-secondary">Enfileirar tarefas</a></p>
+    <div class="home-logo-img-calendarday-text" style="line-height: 40px">Ações</div>
+</span>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
