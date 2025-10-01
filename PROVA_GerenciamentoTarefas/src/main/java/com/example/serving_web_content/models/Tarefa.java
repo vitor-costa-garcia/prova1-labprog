@@ -2,6 +2,7 @@ package com.example.serving_web_content.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -21,6 +22,7 @@ public class Tarefa {
     @NotBlank(message = "O título não pode ser nulo.")
     @Size(max = 100, message = "O título deve ter no máximo 100 caracteres")
     @Column(name="titulo", nullable = false, unique = true, length = 100)
+    @UniqueElements(message = "O título fornecido já foi usado.")
     private String titulo;
 
     @NotBlank(message = "O tipo não pode ser nulo")
