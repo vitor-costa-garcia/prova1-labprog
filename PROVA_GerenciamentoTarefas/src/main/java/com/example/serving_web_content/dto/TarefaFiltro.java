@@ -1,9 +1,5 @@
 package com.example.serving_web_content.dto;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
-
 public class TarefaFiltro {
     private Integer idTarefa;
     private Integer idUsuario;

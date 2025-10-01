@@ -1,6 +1,5 @@
 package com.example.serving_web_content.services;
 
-import com.example.serving_web_content.models.Tarefa;
 import com.example.serving_web_content.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

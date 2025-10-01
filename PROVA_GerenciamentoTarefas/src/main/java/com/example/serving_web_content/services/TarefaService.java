@@ -3,12 +3,10 @@ package com.example.serving_web_content.services;
 import com.example.serving_web_content.dto.TarefaFiltro;
 import com.example.serving_web_content.repository.TarefaRepository;
 import jakarta.validation.Valid;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import com.example.serving_web_content.models.Tarefa;
 import org.springframework.transaction.annotation.Transactional;
