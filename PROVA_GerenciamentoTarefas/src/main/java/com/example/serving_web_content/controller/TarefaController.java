@@ -41,11 +41,15 @@ public class TarefaController {
     }
     @GetMapping
     public String listar(Model model, @ModelAttribute TarefaFiltro tarefa) {
+        List<Tarefa> tarefasBuscadas = tarefaService.listarTarefasFiltradas(tarefa);
         model.addAttribute("tarefasNoFilter", tarefaService.listar());
         List<String> cores = List.of("Amarelo", "Laranja", "Vermelho", "Verde", "Azul", "Roxo");
         model.addAttribute("cores", cores);
         model.addAttribute("tarefaFilter", tarefa);
-        model.addAttribute("tarefas", tarefaService.listarTarefasFiltradas(tarefa));
+        model.addAttribute("tarefas", tarefasBuscadas);
+        if(tarefasBuscadas.isEmpty()){
+            model.addAttribute("msgFiltro", "Não foram encontradas  tarefas.");
+        }
         List<String> situacao = List.of("Em andamento", "Concluído");
         model.addAttribute("situacao", situacao);
         model.addAttribute("usuariosList", usuarioService.listar());

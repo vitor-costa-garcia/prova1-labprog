@@ -75,6 +75,16 @@ body{
     border-radius: 5px;
 }
 
+.lista-neutral-warning{
+    margin-left: 8%;
+    border: #838383 solid 1px;
+    background-color: #eaeaea;
+    color: #2c2c2c;
+    width: 84%;
+    padding: 20px;
+    border-radius: 5px;
+}
+
 .lista-tarefa-button-container{
     margin-left: 8%;
     display: flex;

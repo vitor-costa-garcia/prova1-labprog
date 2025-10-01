@@ -28,13 +28,19 @@ public class UsuarioController {
         model.addAttribute("usuariosNoFilter", usuarioService.listar());
         model.addAttribute("usuarioFilter", usuario); // reuse the one from form
 
+        List<Usuario> usuariosLista;
+
         if ((usuario.getNome() == null || usuario.getNome().isBlank()) &&
                 (usuario.getEmail() == null || usuario.getEmail().isBlank())) {
-            model.addAttribute("usuariosLista", usuarioService.listar());
+            usuariosLista = usuarioService.listar();
         } else {
-            model.addAttribute("usuariosLista", usuarioService.listarPorUsuario(usuario));
+            usuariosLista = usuarioService.listarPorUsuario(usuario);
         }
 
+        model.addAttribute("usuariosLista",usuariosLista);
+        if(usuariosLista.isEmpty()){
+            model.addAttribute("msgFiltro", "Não foram encontrados usuários.");
+        }
         return "usuarios/lista";
     }
 

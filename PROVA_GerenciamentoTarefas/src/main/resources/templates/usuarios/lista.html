@@ -29,6 +29,10 @@
 <!-- Mensagem de erro -->
 <p th:if="${msg != null and error==1}" th:text="${msg}" class="lista-failure-warning"></p>
 
+<!-- Mensagem de filtro -->
+<p th:if="${msgFiltro}" th:text="${msgFiltro}" class="lista-neutral-warning"></p>
+
+
 <div class="lista-tarefa-button-container">
     <p><a class="btn btn-dark" th:href="@{/usuarios/novo}">Novo Usuário</a></p>
     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">

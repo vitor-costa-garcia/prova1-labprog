@@ -28,7 +28,10 @@
 <p th:if="${msg != null and error==0}" th:text="${msg}" class="lista-success-warning"></p>
 
 <!-- Mensagem de erro -->
-<p th:if="${msg != null and error==1}" th:text="${msg}" class="lista-failure-warning"></p>
+<p th:if="${msg != null and error==1}" th:text="${msg}" class="lista-failure-warning">
+
+<!-- Mensagem de filtro -->
+<p th:if="${msgFiltro}" th:text="${msgFiltro}" class="lista-neutral-warning"></p>
 
 <div class="lista-tarefa-button-container">
     <p><a class="btn btn-dark" th:href="@{/tarefas/novo}">Nova Tarefa</a></p>
