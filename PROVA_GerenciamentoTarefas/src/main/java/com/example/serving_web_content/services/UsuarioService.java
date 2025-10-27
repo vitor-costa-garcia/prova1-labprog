@@ -1,13 +1,12 @@
 package com.example.serving_web_content.services;
 
-import com.example.serving_web_content.models.Tarefa;
+import com.example.serving_web_content.dto.LoginData;
 import com.example.serving_web_content.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.example.serving_web_content.models.Usuario;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +23,7 @@ public class UsuarioService {
         Integer idUsuario = usuario.getId();
         String nome = usuario.getNome();
         String email = usuario.getEmail();
+        String senha = usuario.getSenha();
 
         List<Usuario> usersAvailable = UsuarioRepository.findAll();
 
@@ -33,6 +33,9 @@ public class UsuarioService {
         }
         if (email == null || !email.contains("@")) {
             throw new IllegalArgumentException("Email inválido.");
+        }
+        if (senha == null) {
+            throw new IllegalArgumentException("Senha inválido.");
         }
         for (Usuario u :  usersAvailable) {
             if (u.getNome().equals(nome)) {
@@ -44,8 +47,9 @@ public class UsuarioService {
         }
 
         Usuario c = new Usuario(idUsuario,
-                nome,
-                email);
+                                nome,
+                                email,
+                                senha);
         UsuarioRepository.save(c);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
@@ -61,6 +65,7 @@ public class UsuarioService {
         Integer idUsuario = usuario.getId();
         String nome = usuario.getNome();
         String email = usuario.getEmail();
+        String senha = usuario.getSenha();
 
         List<Usuario> usersAvailable = UsuarioRepository.findAll();
 
@@ -70,6 +75,9 @@ public class UsuarioService {
         }
         if (email == null || !email.contains("@")) {
             throw new IllegalArgumentException("Email inválido.");
+        }
+        if (senha == null) {
+            throw new IllegalArgumentException("Senha inválido.");
         }
         for (Usuario u :  usersAvailable) {
             if (u.getNome().equals(nome) && !u.getId().equals(idUsuario)) {
@@ -85,6 +93,7 @@ public class UsuarioService {
             Usuario.setId(idUsuario);
             Usuario.setNome(nome);
             Usuario.setEmail(email);
+            Usuario.setSenha(senha);
 
             Usuario atualizado = UsuarioRepository.save(Usuario);
             return ResponseEntity.ok(atualizado);
@@ -104,6 +113,10 @@ public class UsuarioService {
                 usuario.getEmail() != null ? usuario.getEmail() : "",
                 usuario.getNome() != null ? usuario.getNome() : ""
         );
+    }
+
+    public List<Usuario> verificarLogin(LoginData loginData) {
+        return UsuarioRepository.findByEmailAndSenha(loginData.getEmail(), loginData.getSenha());
     }
 
 

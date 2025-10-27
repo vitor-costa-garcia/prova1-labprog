@@ -33,4 +33,9 @@ public class TarefaFiltro {
 
     public Integer getStatusTarefa() { return statusTarefa; }
     public void setStatusTarefa(Integer statusTarefa) {this.statusTarefa = statusTarefa;}
+
+    public boolean isFiltering(){
+        return idTarefa != null || titulo != null || tipo != null || descricao != null || cor != null
+                || statusTarefa != null || dataInicio != null;
+    }
 }

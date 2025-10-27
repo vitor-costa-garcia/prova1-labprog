@@ -17,7 +17,7 @@
         <div class="home-header-buttons">
             <a class="btn btn-light" href="/home">Início</a>
             <a class="btn btn-light" href="/tarefas">Tarefas</a>
-            <a class="btn btn-light" href="/usuarios">Usuários</a>
+            <a class="btn btn-light" href="/logout">Sair</a>
         </div>
     </div>
 </div>
@@ -28,18 +28,12 @@
 <div class="container-form-tarefa">
     <form th:if="${tarefa.getId()} == null" th:action="@{/tarefas}" method="post" th:object="${tarefa}">
         <!-- Erros de validação -->
-        <div class="form-failure-warning" th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
-
-        <label for="idUsuario">Usuário:</label>
-        <select th:field="*{idUsuario}" id="idUsuario" class="form-select">
-            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getNome()}"></option>
-        </select><br>
 
         <label for="titulo">Titulo:</label>
         <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação"><br>
@@ -88,7 +82,6 @@
 <div class="container-form-tarefa">
     <form th:if="${tarefa.getId()} != null" th:action="@{/tarefas/{id}(id=${tarefa.getId()})}" method="post" th:object="${tarefa}">
         <!-- Erros de validação -->
-        <div class="form-failure-warning" th:if="${#fields.hasErrors('idUsuario')}" th:errors="*{idUsuario}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></div>
         <div class="form-failure-warning" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
@@ -97,11 +90,6 @@
         <div class="form-failure-warning" th:if="${#fields.hasErrors('statusTarefa')}" th:errors="*{statusTarefa}"></div>
 
         <input type="hidden" name="_method" value="put"/>
-
-        <label for="idUsuario">Usuário:</label>
-        <select th:field="*{idUsuario}" id="idUsuario" class="form-select">
-            <option th:each="u: ${usuarios}" th:value="${u.getId()}" th:text="${u.getNome()}"></option>
-        </select><br>
 
         <label for="titulo">Titulo:</label>
         <input th:field="*{titulo}" id="titulo" type="text" class="form-control" placeholder="Ex: Trabalho Laboratório programação"><br>

@@ -3,6 +3,7 @@ package com.example.serving_web_content.controller;
 import com.example.serving_web_content.models.Tarefa;
 import com.example.serving_web_content.models.Usuario;
 import com.example.serving_web_content.services.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,29 +24,35 @@ public class UsuarioController {
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
-    @GetMapping
-    public String listar(Model model, @ModelAttribute Usuario usuario) {
-        model.addAttribute("usuariosNoFilter", usuarioService.listar());
-        model.addAttribute("usuarioFilter", usuario); // reuse the one from form
 
-        List<Usuario> usuariosLista;
+    //@GetMapping
+    //public String listar(Model model, @ModelAttribute Usuario usuario, HttpSession session) {
+    //    Object loggedUserData = session.getAttribute("loggedUserData");
+    //    if(loggedUserData == null){
+    //        return "redirect:/";
+    //    }
+    //    model.addAttribute("usuariosNoFilter", usuarioService.listar());
+    //    model.addAttribute("usuarioFilter", usuario); // reuse the one from form
 
-        if ((usuario.getNome() == null || usuario.getNome().isBlank()) &&
-                (usuario.getEmail() == null || usuario.getEmail().isBlank())) {
-            usuariosLista = usuarioService.listar();
-        } else {
-            usuariosLista = usuarioService.listarPorUsuario(usuario);
-        }
+    //    List<Usuario> usuariosLista;
 
-        model.addAttribute("usuariosLista",usuariosLista);
-        if(usuariosLista.isEmpty()){
-            model.addAttribute("msgFiltro", "Não foram encontrados usuários.");
-        }
-        return "usuarios/lista";
-    }
+    //    if ((usuario.getNome() == null || usuario.getNome().isBlank()) &&
+    //            (usuario.getEmail() == null || usuario.getEmail().isBlank())) {
+    //        usuariosLista = usuarioService.listar();
+    //    } else {
+    //        usuariosLista = usuarioService.listarPorUsuario(usuario);
+    //    }
+
+    //    model.addAttribute("usuariosLista",usuariosLista);
+    //    if(usuariosLista.isEmpty()){
+    //        model.addAttribute("msgFiltro", "Não foram encontrados usuários.");
+    //    }
+    //    return "usuarios/lista";
+    //}
 
     @GetMapping("/novo")
-    public String abrirCadastro(Model model) {
+    public String abrirCadastro(Model model, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
         Usuario formUsuario = new Usuario();
         formUsuario.setId(null);
         System.out.print(formUsuario.getId());
@@ -56,8 +63,8 @@ public class UsuarioController {
     @PostMapping
     public String cadastrar(@Valid @ModelAttribute Usuario usuario,
                             BindingResult erros,
-                            RedirectAttributes ra) {
-
+                            RedirectAttributes ra,
+                            HttpSession session) {
         if (erros.hasErrors()) {
             return "usuarios/form";
         }
@@ -66,16 +73,21 @@ public class UsuarioController {
         } catch(IllegalArgumentException inputInvalid) {
             ra.addFlashAttribute("msg", "Não foi possível cadastrar o usuário.\nErro: " + inputInvalid.getMessage());
             ra.addFlashAttribute("error", 1);
-            return "redirect:/usuarios";
+            return "redirect:/";
         }
         ;
-        ra.addFlashAttribute("msg", "Usuário cadastrado com sucesso!");
+        ra.addFlashAttribute("msg", "Conta criada com sucesso!");
         ra.addFlashAttribute("error", 0);
-        return "redirect:/usuarios";
+        return "redirect:/";
     }
 
     @GetMapping("/editar/{id}")
-    public String abrirEdicao(@PathVariable Long id, Model model) {
+    public String abrirEdicao(@PathVariable Long id, Model model, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
+
         model.addAttribute("usuario", usuarioService.listarPorId(Math.toIntExact(id)));
         return "usuarios/form";
     }
@@ -84,7 +96,13 @@ public class UsuarioController {
     public String atualizar(@PathVariable Long id,
                             @Valid @ModelAttribute Usuario usuario,
                             BindingResult erros,
-                            RedirectAttributes ra) {
+                            RedirectAttributes ra,
+                            HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
+
         if (erros.hasErrors()) {
             return "usuarios/form";
         }
@@ -102,7 +120,11 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{idUsuario}")
-    public String excluir(@PathVariable("idUsuario") Integer idUsuario, RedirectAttributes ra) {
+    public String excluir(@PathVariable("idUsuario") Integer idUsuario, RedirectAttributes ra, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
         List<Usuario> usuariosAvailable = usuarioService.listar();
         List<Integer> usuariosIds = new ArrayList<>();
         for (Usuario u : usuariosAvailable) {

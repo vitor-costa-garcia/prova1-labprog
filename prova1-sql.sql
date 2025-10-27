@@ -5,7 +5,8 @@ USE gerenciamento_tarefas;
 CREATE TABLE usuario (
 	idUsuario BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE,
-    email VARCHAR(150) NOT NULL UNIQUE
+    email VARCHAR(150) NOT NULL UNIQUE,
+    senha CHAR(128) NOT NULL
 );
 
 CREATE TABLE tarefas (
@@ -27,9 +28,9 @@ CREATE TABLE tarefas (
 	ON DELETE CASCADE
 );
 
-INSERT INTO usuario VALUES (1, "Vitor da Costa", "vitorcostagarcia2006@gmail.com");
-INSERT INTO usuario VALUES (2, "Gustavo Naozuka", "gustavonaozuka@gmail.com");
-INSERT INTO usuario VALUES (3, "Fulano de Souza", "fulanodesouza@gmail.com");
+INSERT INTO usuario VALUES (1, "Vitor da Costa", "vitorcostagarcia2006@gmail.com", "12345");
+INSERT INTO usuario VALUES (2, "Gustavo Naozuka", "gustavonaozuka@gmail.com", "1234");
+INSERT INTO usuario VALUES (3, "Fulano de Souza", "fulanodesouza@gmail.com", "123");
 
 INSERT INTO tarefas (idUsuario, titulo, tipo, descricao, dataInicio, posx, posy, comprimento, altura, cor, statusTarefa)
 VALUES

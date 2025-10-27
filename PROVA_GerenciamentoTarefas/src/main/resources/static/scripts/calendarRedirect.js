@@ -5,7 +5,7 @@ document.querySelectorAll('.calendar-day').forEach(function(dayBlock) {
 
         // Construct the URL dynamically
         // Example: Redirect to a page that shows details for that specific day
-        window.location.href = `/tarefas/1/${date}`;
+        window.location.href = `/tarefas/${date}`;
 
         // Or for a simpler, static redirect:
         // window.location.href = 'some-other-page.html';

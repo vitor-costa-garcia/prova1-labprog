@@ -8,6 +8,7 @@ import com.example.serving_web_content.models.Usuario;
 import com.example.serving_web_content.repository.TarefaRepository;
 import com.example.serving_web_content.services.TarefaService;
 import com.example.serving_web_content.services.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -30,17 +31,48 @@ import java.util.Optional;
 @RequestMapping("/tarefas")
 public class TarefaController {
     private final TarefaService tarefaService;
-    private final TarefaRepository tarefaRepository;
     private final UsuarioService usuarioService;
 
     @Autowired
     public TarefaController(TarefaService tarefaService, TarefaRepository tarefaRepository, UsuarioService usuarioService) {
         this.tarefaService = tarefaService;
-        this.tarefaRepository = tarefaRepository;
         this.usuarioService = usuarioService;
     }
+
+
     @GetMapping
-    public String listar(Model model, @ModelAttribute TarefaFiltro tarefa) {
+    public String listar(Model model, @ModelAttribute TarefaFiltro tarefa, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
+
+        tarefa.setIdUsuario((Integer) session.getAttribute("loggedUserId"));
+        if(tarefa.isFiltering()){
+            session.setAttribute("tarefaFilter", tarefa);
+            session.setAttribute("tarefaFiltroIdTarefa", tarefa.getIdTarefa());
+            session.setAttribute("tarefaFiltroTitulo", tarefa.getTitulo());
+            session.setAttribute("tarefaFiltroTipo", tarefa.getTipo());
+            session.setAttribute("tarefaFiltroDescricao", tarefa.getDescricao());
+            session.setAttribute("tarefaFiltroDataInicio", tarefa.getDataInicio());
+            session.setAttribute("tarefaFiltroCor", tarefa.getCor());
+            session.setAttribute("tarefaFiltroStatusTarefa", tarefa.getStatusTarefa());
+        }
+
+        if(session.getAttribute("tarefaFilter") != null){
+            tarefa.setIdTarefa((Integer) session.getAttribute("tarefaFiltroIdTarefa"));
+            tarefa.setTitulo((String) session.getAttribute("tarefaFiltroTitulo"));
+            tarefa.setTipo((String) session.getAttribute("tarefaFiltroTipo"));
+            tarefa.setDescricao((String) session.getAttribute("tarefaFiltroDescricao"));
+            tarefa.setDataInicio((String)  session.getAttribute("tarefaFiltroDataInicio"));
+            tarefa.setCor((Integer) session.getAttribute("tarefaFiltroCor"));
+            tarefa.setStatusTarefa((Integer) session.getAttribute("tarefaFiltroStatusTarefa"));
+            model.addAttribute("tarefaFilterOn", 1);
+        } else {
+            model.addAttribute("tarefaFilterOn", 0);
+        }
+
         List<Tarefa> tarefasBuscadas = tarefaService.listarTarefasFiltradas(tarefa);
         model.addAttribute("tarefasNoFilter", tarefaService.listar());
         List<String> cores = List.of("Amarelo", "Laranja", "Vermelho", "Verde", "Azul", "Roxo");
@@ -56,8 +88,37 @@ public class TarefaController {
         return "tarefas/lista";
     }
 
-    @GetMapping("/{idUsuario}/{dataInicio}")
-    public String verDia(@PathVariable Integer idUsuario, @PathVariable String dataInicio, Model model, @ModelAttribute TarefaFiltro tarefa) {
+    @GetMapping("/limpar")
+    public String limpar(Model model, HttpSession session) {
+        session.removeAttribute("tarefaFilter");
+        return "redirect:/tarefas";
+    }
+
+    @GetMapping("/{dataInicio}")
+    public String verDia(@PathVariable String dataInicio,
+                         Model model,
+                         @ModelAttribute TarefaFiltro tarefa,
+                         HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
+
+        if(session.getAttribute("tarefaFilter") != null){
+            tarefa.setIdTarefa((Integer) session.getAttribute("tarefaFiltroIdTarefa"));
+            tarefa.setTitulo((String) session.getAttribute("tarefaFiltroTitulo"));
+            tarefa.setTipo((String) session.getAttribute("tarefaFiltroTipo"));
+            tarefa.setDescricao((String) session.getAttribute("tarefaFiltroDescricao"));
+            tarefa.setDataInicio((String)  session.getAttribute("tarefaFiltroDataInicio"));
+            tarefa.setCor((Integer) session.getAttribute("tarefaFiltroCor"));
+            tarefa.setStatusTarefa((Integer) session.getAttribute("tarefaFiltroStatusTarefa"));
+            model.addAttribute("tarefaFilterOn", 1);
+        } else {
+            model.addAttribute("tarefaFilterOn", 0);
+        }
+
+        Integer idUsuario = (Integer) session.getAttribute("loggedUserId");
+        System.out.println("idUsuario: " + idUsuario);
         tarefa.setIdUsuario(idUsuario);
         tarefa.setDataInicio(dataInicio);
         List<Tarefa> tarefasFiltradas = tarefaService.listarTarefasFiltradas(tarefa);
@@ -97,10 +158,13 @@ public class TarefaController {
     }
 
     @GetMapping("/novo/{data}")
-    public String abrirCadastro(@PathVariable String data, Model model) {
+    public String abrirCadastro(@PathVariable String data, Model model, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
         Tarefa formTarefa = new Tarefa();
         formTarefa.setId(null);
-        System.out.print(formTarefa.getId());
         formTarefa.setDataInicio(data);
         model.addAttribute("tarefa", formTarefa);
         model.addAttribute("usuarios", usuarioService.listar());
@@ -111,27 +175,31 @@ public class TarefaController {
     public String cadastrar(@Valid @ModelAttribute Tarefa tarefa,
                             BindingResult erros,
                             RedirectAttributes ra,
-                            Model model) {
-
-        if (erros.hasErrors()) {
-            model.addAttribute("usuarios", usuarioService.listar());
-            return "tarefas/form";
+                            Model model,
+                            HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
         }
         try {
+            tarefa.setIdUsuario((Integer) session.getAttribute("loggedUserId"));
             tarefaService.adicionar(tarefa);
         } catch(IllegalArgumentException inputInvalid) {
             ra.addFlashAttribute("msg", "Não foi possível cadastrar a tarefa.\nErro: " + inputInvalid.getMessage());
             ra.addFlashAttribute("error", 1);
             return "redirect:/tarefas";
         }
-        ;
         ra.addFlashAttribute("msg", "Tarefa cadastrada com sucesso!");
         ra.addFlashAttribute("error", 0);
         return "redirect:/tarefas";
     }
 
     @PostMapping("/atualizar_pos")
-    public ResponseEntity<?> updatePosition(@RequestBody TarefaPos dto) {
+    public ResponseEntity<?> updatePosition(@RequestBody TarefaPos dto, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Tarefa tarefaMovida = tarefaService.listarPorId(dto.getId());
         if (tarefaMovida.getId() != null) {
             tarefaMovida.setPosx(dto.getX());
@@ -144,7 +212,11 @@ public class TarefaController {
     }
 
     @PostMapping("/atualizar_tamanho")
-    public ResponseEntity<?> updateSize(@RequestBody TarefaTam dto) {
+    public ResponseEntity<?> updateSize(@RequestBody TarefaTam dto, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Tarefa tarefaRedim = tarefaService.listarPorId(dto.getIdTarefa());
         if (tarefaRedim.getId() != null) {
             tarefaRedim.setComprimento(dto.getComprimento());
@@ -157,7 +229,11 @@ public class TarefaController {
     }
 
     @GetMapping("/editar/{id}")
-    public String abrirEdicao(@PathVariable Integer id, Model model) {
+    public String abrirEdicao(@PathVariable Integer id, Model model, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
         model.addAttribute("tarefa", tarefaService.listarPorId(id));
         model.addAttribute("usuarios", usuarioService.listar());
         return "tarefas/form";
@@ -167,12 +243,14 @@ public class TarefaController {
                             @Valid @ModelAttribute Tarefa tarefa,
                             BindingResult erros,
                             RedirectAttributes ra,
-                            Model model) {
-        if (erros.hasErrors()) {
-            model.addAttribute("usuarios", usuarioService.listar());
-            return "tarefas/form";
+                            Model model,
+                            HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
         }
         try {
+            tarefa.setIdUsuario((Integer) session.getAttribute("loggedUserId"));
             tarefaService.atualizar(id, tarefa);
         } catch(IllegalArgumentException inputInvalid) {
             ra.addFlashAttribute("msg", "Não foi possível atualizar a tarefa.\nErro: " + inputInvalid.getMessage());
@@ -186,7 +264,11 @@ public class TarefaController {
     }
 
     @DeleteMapping("/{idTarefa}")
-    public String excluir(@PathVariable("idTarefa") Integer idTarefa, RedirectAttributes ra) {
+    public String excluir(@PathVariable("idTarefa") Integer idTarefa, RedirectAttributes ra, HttpSession session) {
+        Object loggedUserData = session.getAttribute("loggedUserData");
+        if(loggedUserData == null){
+            return "redirect:/";
+        }
         List<Tarefa> tarefasAvailable = tarefaService.listar();
         List<Integer> tarefasIds = new ArrayList<>();
         for (Tarefa t : tarefasAvailable) {

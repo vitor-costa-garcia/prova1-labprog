@@ -18,7 +18,7 @@
         <div class="home-header-buttons">
             <a class="btn btn-light" href="/home">Início</a>
             <a class="btn btn-light" href="/tarefas">Tarefas</a>
-            <a class="btn btn-light" href="/usuarios">Usuários</a>
+            <a class="btn btn-light" href="/logout">Sair</a>
         </div>
     </div>
 </div>
@@ -38,6 +38,7 @@
     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal1">
         Filtrar tarefas
     </button>
+    <button class="btn btn-dark" th:if="${tarefaFilterOn == 1}"><a href="/tarefas/limpar">Limpar filtros</a></button>
 </div>
 
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -51,12 +52,6 @@
             </div>
             <div class="modal-body">
                 <form th:action="@{/tarefas}" method="get" th:object="${tarefaFilter}">
-                    <label for="idUsuario">Usuário:</label>
-                    <select th:field="*{idUsuario}" id="idUsuario" class="form-select">
-                        <option value="">Selecione</option>
-                        <option th:each="u: ${usuariosList}" th:value="${u.getId()}" th:text="${u.getNome()}"></option>
-                    </select><br>
-
                     <label for="tarefa">Tarefa:</label>
                     <select th:field="*{idTarefa}" id="tarefa" class="form-select">
                         <option value="">Selecione</option>
@@ -106,7 +101,6 @@
 <div class="tabela-tarefa-container">
     <table class="tabela-tarefa">
         <tr class="tabela-tarefa-header">
-            <th>Usuário</th>
             <th>Título</th>
             <th>Tipo</th>
             <th>Descrição</th>
@@ -117,7 +111,6 @@
         </tr>
 
         <tr th:each="c : ${tarefas}" class="tabela-tarefa-row">
-            <td th:text="${c.idUsuario}"></td>
             <td th:text="${c.titulo.length() > 20} ? ${c.titulo.substring(0, 20)} + '...' : ${c.titulo}"></td>
             <td th:text="${c.tipo}"></td>
             <td th:text="${c.descricao.length() > 40} ? ${c.descricao.substring(0, 40)} + '...' : ${c.descricao}"></td>

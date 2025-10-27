@@ -26,13 +26,20 @@ public class Usuario {
     @Column(name="email", nullable = false, unique = true, length = 200)
     private String email;
 
+    @NotBlank
+    @Size(max=128, message = "A senha não pode ter mais de 128 caracteres")
+    @Column(name="senha", nullable = false, length = 128)
+    private String senha;
+
     public Usuario(Integer idUsuario,
                    String nome,
-                   String email
+                   String email,
+                   String senha
                   ) {
         this.idUsuario = idUsuario;
         this.nome = nome;
         this.email = email;
+        this.senha = senha;
     }
 
     public Usuario() {
@@ -42,9 +49,11 @@ public class Usuario {
     public Integer getId(){ return idUsuario; }
     public String getNome(){ return nome; }
     public String getEmail(){ return email; }
+    public String getSenha(){ return senha; }
 
     public void setId(Integer idUsuario){ this.idUsuario = idUsuario; }
     public void setNome(String nome){ this.nome = nome; }
     public void setEmail(String email){ this.email = email; }
+    public void setSenha(String senha){ this.senha = senha; }
 // getters e setters
 }
